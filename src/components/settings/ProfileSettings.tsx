@@ -4,12 +4,16 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { User, Camera, Trash2 } from 'lucide-react';
-import { useAuthStore } from '../../store/useAuthStore';
-import { supabase } from '../../lib/supabase';
+import { useDataStore } from '../../store/useDataStore';
 
 export function ProfileSettings() {
     const { t } = useTranslation();
     const { user, updateUser } = useAuthStore();
+    const { tenants } = useDataStore();
+
+    // ... (keep existing state)
+
+    const currentTenant = tenants.find(t => t.id === user?.tenantId);
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState(user?.name || '');
     const [email, setEmail] = useState(user?.email || '');
@@ -141,7 +145,7 @@ export function ProfileSettings() {
                             />
                             <Input
                                 label={t('settings.profile.restaurant')}
-                                defaultValue="Restaurante Mare"
+                                value={currentTenant?.name || 'Sem Restaurante associado'}
                                 disabled
                             />
                             <Input
