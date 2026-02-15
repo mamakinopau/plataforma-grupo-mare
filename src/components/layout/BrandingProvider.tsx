@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
-import { useTenantStore } from '../../store/useTenantStore';
+import { useAuthStore } from '../../store/useAuthStore';
+import { useDataStore } from '../../store/useDataStore';
 
 export function BrandingProvider({ children }: { children: React.ReactNode }) {
-    const { currentTenant } = useTenantStore();
+    const { user } = useAuthStore();
+    const { tenants } = useDataStore();
+
+    const currentTenant = user?.tenantId ? tenants.find(t => t.id === user.tenantId) : null;
 
     useEffect(() => {
         if (currentTenant?.theme) {
