@@ -30,7 +30,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
                 if (profile) {
                     set({
-                        user: { ...profile, email: session.user.email! } as User,
+                        user: {
+                            id: session.user.id,
+                            email: session.user.email!,
+                            name: profile.name,
+                            role: profile.role,
+                            tenantId: profile.tenant_id,
+                            avatarUrl: profile.avatar_url,
+                            phone: profile.phone,
+                            position: profile.position,
+                            points: profile.points,
+                            level: profile.level,
+                            streak: profile.streak,
+                            isActive: profile.is_active,
+                            onboardingCompleted: profile.onboarding_completed,
+                            joinedAt: profile.created_at,
+                            preferences: { // Default preferences for now
+                                emailNotifications: true,
+                                pushNotifications: true,
+                                marketingEmails: false
+                            }
+                        } as User,
                         isAuthenticated: true,
                         isLoading: false
                     });
@@ -71,7 +91,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                     .single();
 
                 set({
-                    user: { ...(profile || {}), email: data.session.user.email!, id: data.session.user.id } as User,
+                    user: {
+                        id: data.session.user.id,
+                        email: data.session.user.email!,
+                        name: profile.name,
+                        role: profile.role,
+                        tenantId: profile.tenant_id,
+                        avatarUrl: profile.avatar_url,
+                        phone: profile.phone,
+                        position: profile.position,
+                        points: profile.points,
+                        level: profile.level,
+                        streak: profile.streak,
+                        isActive: profile.is_active,
+                        onboardingCompleted: profile.onboarding_completed,
+                        joinedAt: profile.created_at,
+                        preferences: { // Default preferences for now
+                            emailNotifications: true,
+                            pushNotifications: true,
+                            marketingEmails: false
+                        }
+                    } as User,
                     isAuthenticated: true
                 });
             }
@@ -120,7 +160,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         } catch (error) {
             console.error('Failed to update user profile:', error);
             // Revert optimistic update (optional, but good practice)
-            // set({ user: currentUser }); 
+            // set({ user: currentUser });
             alert('Erro ao gravar alterações no perfil.');
         }
     },
