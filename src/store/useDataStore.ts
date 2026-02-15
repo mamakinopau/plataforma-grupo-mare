@@ -223,11 +223,20 @@ export const useDataStore = create<DataState>((set, get) => ({
             .delete()
             .eq('id', id);
 
-        if (!error) {
-            set(state => ({
-                tenants: state.tenants.filter(t => t.id !== id)
-            }));
+        if (error) {
+            console.error('Error deleting tenant:', error);
+            // Translate common errors
+            if (error.code === '23503') { // Foreign key violation
+                alert('Não é possível apagar este restaurante porque existem utilizadores associados a ele. Remova os utilizadores primeiro ou contacte o suporte.');
+            } else {
+                alert(`Erro ao apagar restaurante: ${error.message}`);
+            }
+            return;
         }
+
+        set(state => ({
+            tenants: state.tenants.filter(t => t.id !== id)
+        }));
     },
 }));
 
