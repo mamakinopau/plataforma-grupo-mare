@@ -49,6 +49,7 @@ export interface User {
     role: UserRole;
     tenantId: string;
     avatarUrl?: string;
+    phone?: string;
     position?: string;
 
     // Gamification

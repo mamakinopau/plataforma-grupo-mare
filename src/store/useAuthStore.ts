@@ -87,8 +87,42 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({ user: null, isAuthenticated: false });
     },
 
-    updateUser: (updates) => set((state) => ({
-        user: state.user ? { ...state.user, ...updates } : null
-    })),
+    updateUser: async (updates) => {
+        const currentUser = get().user;
+        if (!currentUser) return;
+
+        // Optimistic update
+        set((state) => ({
+            user: state.user ? { ...state.user, ...updates } : null
+        }));
+
+        try {
+            // Persist to Supabase
+            // Map camelCase to snake_case for DB
+            const dbUpdates: any = {
+                name: updates.name,
+                email: updates.email,
+                avatar_url: updates.avatarUrl,
+                phone: updates.phone,
+                // Add other fields as necessary
+            };
+
+            // Remove undefined fields
+            Object.keys(dbUpdates).forEach(key => dbUpdates[key] === undefined && delete dbUpdates[key]);
+
+            const { error } = await supabase
+                .from('profiles')
+                .update(dbUpdates)
+                .eq('id', currentUser.id);
+
+            if (error) throw error;
+
+        } catch (error) {
+            console.error('Failed to update user profile:', error);
+            // Revert optimistic update (optional, but good practice)
+            // set({ user: currentUser }); 
+            alert('Erro ao gravar alterações no perfil.');
+        }
+    },
 }));
 

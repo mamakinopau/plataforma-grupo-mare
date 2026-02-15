@@ -13,6 +13,7 @@ export function ProfileSettings() {
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState(user?.name || '');
     const [email, setEmail] = useState(user?.email || '');
+    const [phone, setPhone] = useState(user?.phone || '');
     const [photoUrl, setPhotoUrl] = useState(user?.avatarUrl || '');
     const [uploading, setUploading] = useState(false);
 
@@ -50,6 +51,7 @@ export function ProfileSettings() {
         updateUser({
             name,
             email,
+            phone,
             avatarUrl: photoUrl
         });
 
@@ -134,6 +136,8 @@ export function ProfileSettings() {
                                 label={t('settings.profile.phone')}
                                 type="tel"
                                 placeholder="+351 912 345 678"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
                             />
                             <Input
                                 label={t('settings.profile.restaurant')}
