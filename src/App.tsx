@@ -91,27 +91,27 @@ function App() {
 
                     {/* Admin Routes */}
                     <Route path="admin/users" element={
-                        <RoleBasedRoute allowedRoles={['admin', 'manager']}>
+                        <RoleBasedRoute allowedRoles={['super_admin', 'admin', 'manager']}>
                             <UserManagement />
                         </RoleBasedRoute>
                     } />
                     <Route path="admin/announcements" element={
-                        <RoleBasedRoute allowedRoles={['admin', 'manager']}>
+                        <RoleBasedRoute allowedRoles={['super_admin', 'admin', 'manager']}>
                             <Announcements />
                         </RoleBasedRoute>
                     } />
                     <Route path="admin/tenants" element={
-                        <RoleBasedRoute allowedRoles={['admin']}>
+                        <RoleBasedRoute allowedRoles={['super_admin', 'admin']}>
                             <TenantManagement />
                         </RoleBasedRoute>
                     } />
                     <Route path="admin/courses/new" element={
-                        <RoleBasedRoute allowedRoles={['admin', 'manager']}>
+                        <RoleBasedRoute allowedRoles={['super_admin', 'admin', 'manager']}>
                             <CourseEditor />
                         </RoleBasedRoute>
                     } />
                     <Route path="admin/courses/:courseId/edit" element={
-                        <RoleBasedRoute allowedRoles={['admin', 'manager']}>
+                        <RoleBasedRoute allowedRoles={['super_admin', 'admin', 'manager']}>
                             <CourseEditor />
                         </RoleBasedRoute>
                     } />
