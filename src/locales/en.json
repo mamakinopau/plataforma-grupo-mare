@@ -1,0 +1,495 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "accessDenied": "Access Denied",
+        "accessDeniedMessage": "You don't have permission to access this page.",
+        "backToDashboard": "Back to Dashboard",
+        "export": "Export",
+        "exportSuccess": "Export successful",
+        "saving": "Saving...",
+        "error": "An error occurred",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "back": "Back",
+        "next": "Next",
+        "search": "Search",
+        "filter": "Filter",
+        "actions": "Actions",
+        "status": "Status",
+        "date": "Date",
+        "user": "User",
+        "role": "Role",
+        "restaurant": "Restaurant",
+        "dashboard": "Dashboard",
+        "courses": "Courses",
+        "leaderboard": "Leaderboard",
+        "team": "Team",
+        "reports": "Reports",
+        "users": "Users",
+        "announcements": "Announcements",
+        "settings": "Settings",
+        "tenants": "Tenants",
+        "help": "Help",
+        "logout": "Logout",
+        "welcome": "Welcome",
+        "inProgress": "In Progress",
+        "continueLearning": "Continue Learning",
+        "browseLibrary": "Browse Library",
+        "noCoursesInProgress": "No courses in progress.",
+        "resume": "Resume",
+        "startCourse": "Start Course",
+        "completed": "Completed",
+        "accessedOn": "Accessed on"
+    },
+    "gamification": {
+        "currentLevel": "Current Level",
+        "toNextLevel": " XP to next level",
+        "totalXp": "Total XP",
+        "badges": "Badges",
+        "dayStreak": "day Streak",
+        "earned": "Earned"
+    },
+    "auth": {
+        "login": {
+            "title": "Welcome back",
+            "subtitle": "Sign in to your account",
+            "email": "Email address",
+            "password": "Password",
+            "submit": "Sign in",
+            "forgotPassword": "Forgot password?",
+            "noAccount": "Don't have an account? Contact your manager."
+        }
+    },
+    "admin": {
+        "title": "Admin Dashboard",
+        "subtitle": "Overview of platform performance and key metrics.",
+        "performanceByRestaurant": "Performance by Restaurant",
+        "popularCourses": "Popular Courses",
+        "systemAlerts": "System Alerts",
+        "quickActions": "Quick Actions",
+        "stats": {
+            "totalUsers": "Total Users",
+            "activeCourses": "Active Courses",
+            "completionRate": "Completion Rate",
+            "certificatesIssued": "Certificates Issued"
+        },
+        "actions": {
+            "generateReport": "Generate Report",
+            "manageUsers": "Manage Users",
+            "reviewContent": "Review Content"
+        }
+    },
+    "dashboard": {
+        "welcome": "Welcome back, {{name}}!",
+        "subtitle": "Here's what's happening with your learning journey today.",
+        "stats": {
+            "coursesCompleted": "Courses Completed",
+            "hoursLearning": "Hours Learning",
+            "certificates": "Certificates",
+            "currentStreak": "Current Streak",
+            "averageScore": "Average Score"
+        },
+        "continueLearning": "Continue Learning",
+        "recommended": "Recommended for You",
+        "myProgress": "My Progress",
+        "recommendedCourses": "Recommended Courses",
+        "recentActivity": "Recent Activity"
+    },
+    "courses": {
+        "title": "Course Library",
+        "subtitle": "Browse and enroll in training modules.",
+        "createCourse": "Create Course",
+        "startCourse": "Start Course",
+        "mandatory": "Mandatory",
+        "min": "min"
+    },
+    "leaderboard": {
+        "title": "Leaderboard",
+        "subtitle": "See who's leading the learning journey.",
+        "global": "Global",
+        "myRestaurant": "My Restaurant",
+        "topLearners": "Top Learners",
+        "viewAll": "View All",
+        "rankings": "Rankings"
+    },
+    "help": {
+        "title": "How can we help you?",
+        "subtitle": "Search our knowledge base or browse frequently asked questions.",
+        "searchPlaceholder": "Search for answers...",
+        "noResults": "No results found for",
+        "cards": {
+            "guides": {
+                "title": "User Guides",
+                "desc": "Detailed tutorials on how to use the platform."
+            },
+            "docs": {
+                "title": "Documentation",
+                "desc": "Technical documentation and policy documents."
+            },
+            "support": {
+                "title": "Contact Support",
+                "desc": "Get in touch with our support team."
+            }
+        },
+        "faqTitle": "Frequently Asked Questions",
+        "faqs": {
+            "q1": "How do I reset my password?",
+            "a1": "You can reset your password by clicking on the 'Forgot Password' link on the login page. Follow the instructions sent to your email.",
+            "q2": "How do I track my progress?",
+            "a2": "Your progress is displayed on your Dashboard. You can see your completed courses, current level, and learning streak.",
+            "q3": "Can I download my certificates?",
+            "a3": "Yes! Once you complete a course, a certificate is generated. You can view and download it from the Course Detail page or your Profile.",
+            "q4": "How do I contact support?",
+            "a4": "If you need further assistance, you can contact your manager or use the 'Contact Support' form below.",
+            "q5": "What happens if I miss a deadline?",
+            "a5": "If you miss a mandatory training deadline, your manager will be notified. Please complete the training as soon as possible."
+        }
+    },
+    "notifications": {
+        "empty": "No notifications yet",
+        "welcome": {
+            "title": "Welcome to the platform!",
+            "message": "Get started by exploring your dashboard."
+        },
+        "assigned": {
+            "title": "New Course Assigned",
+            "message": "You have been assigned \"Advanced Wine Pairing\"."
+        }
+    },
+    "announcements": {
+        "title": "Announcements",
+        "subtitle": "Manage global announcements for the platform.",
+        "new": "New Announcement",
+        "createTitle": "Create Announcement",
+        "form": {
+            "title": "Title",
+            "titlePlaceholder": "e.g., System Maintenance",
+            "content": "Content",
+            "contentPlaceholder": "Announcement details...",
+            "priority": "Priority",
+            "priorities": {
+                "low": "Low (Blue)",
+                "medium": "Medium (Amber)",
+                "high": "High (Red)"
+            },
+            "activeImmediately": "Active immediately",
+            "cancel": "Cancel",
+            "create": "Create Announcement"
+        },
+        "empty": "No announcements yet",
+        "emptyDesc": "Create one to communicate with all users.",
+        "created": "Created:",
+        "priority": "Priority:",
+        "inactive": "Inactive",
+        "mock": {
+            "maintenance": {
+                "title": "Platform Maintenance",
+                "content": "The platform will be undergoing scheduled maintenance on Sunday at 2 AM."
+            }
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Manage your account preferences and settings.",
+        "tabs": {
+            "profile": "Profile",
+            "notifications": "Notifications",
+            "appearance": "Appearance",
+            "privacy": "Privacy & Data",
+            "company": "Company Settings"
+        },
+        "profile": {
+            "title": "Personal Profile",
+            "subtitle": "Manage your personal information.",
+            "photo": "Profile Photo",
+            "changePhoto": "Change Photo",
+            "removePhoto": "Remove",
+            "fullName": "Full Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "restaurant": "Restaurant",
+            "role": "Role",
+            "save": "Save Changes",
+            "password": {
+                "title": "Change Password",
+                "current": "Current Password",
+                "new": "New Password",
+                "confirm": "Confirm New Password"
+            }
+        },
+        "notifications": {
+            "title": "Notification Preferences",
+            "subtitle": "Choose how you want to be notified.",
+            "email": {
+                "title": "Email Notifications",
+                "assigned": "New course assigned",
+                "deadline": "Deadline approaching (3 days)",
+                "certificate": "Certificate earned",
+                "newsletter": "Monthly newsletter"
+            },
+            "push": {
+                "title": "Push Notifications",
+                "enable": "Enable in-app notifications"
+            },
+            "reminders": {
+                "title": "Reminders",
+                "daily": "Daily reminders for pending training"
+            },
+            "frequency": {
+                "label": "Email Summary Frequency",
+                "daily": "Daily",
+                "weekly": "Weekly",
+                "never": "Never"
+            },
+            "save": "Save Preferences"
+        },
+        "appearance": {
+            "title": "Appearance Settings",
+            "subtitle": "Customize your viewing experience.",
+            "theme": {
+                "label": "Theme",
+                "light": "Light Mode",
+                "dark": "Dark Mode"
+            },
+            "fontSize": {
+                "label": "Font Size",
+                "small": "Small",
+                "medium": "Medium",
+                "large": "Large"
+            },
+            "language": {
+                "label": "Language"
+            },
+            "timezone": {
+                "label": "Timezone"
+            }
+        },
+        "privacy": {
+            "title": "Privacy & Data",
+            "subtitle": "Manage your data and privacy settings.",
+            "data": {
+                "title": "Personal Data",
+                "view": "View Stored Data",
+                "export": "Export Data (GDPR)"
+            },
+            "security": {
+                "title": "Security",
+                "history": "Login History",
+                "devices": "Active Devices"
+            }
+        },
+        "company": {
+            "title": "Company Settings",
+            "subtitle": "Manage your organization's branding and settings.",
+            "branding": {
+                "title": "Branding",
+                "name": "Company Name",
+                "logo": "Company Logo",
+                "upload": "Upload Logo",
+                "primaryColor": "Primary Color",
+                "secondaryColor": "Secondary Color"
+            },
+            "support": {
+                "title": "Support",
+                "email": "Support Email"
+            },
+            "certificates": {
+                "title": "Certificates",
+                "validity": "Default Validity (Months)"
+            },
+            "save": "Save Company Settings"
+        }
+    },
+    "team": {
+        "title": "Team Management",
+        "subtitle": "Manage your users, roles, and permissions.",
+        "stats": {
+            "totalUsers": "Total Users",
+            "activeToday": "Active Today",
+            "newThisMonth": "New This Month"
+        },
+        "filters": {
+            "searchPlaceholder": "Search by name or email...",
+            "allRestaurants": "All Restaurants",
+            "allRoles": "All Roles",
+            "allStatus": "All Status",
+            "moreFilters": "More Filters"
+        },
+        "table": {
+            "user": "User",
+            "role": "Role",
+            "restaurant": "Restaurant",
+            "progress": "Progress",
+            "status": "Status",
+            "actions": "Actions",
+            "selected": "{{count}} users selected"
+        },
+        "actions": {
+            "addUser": "Add User",
+            "importCsv": "Import CSV",
+            "manageRoles": "Manage Roles",
+            "assignTraining": "Assign Training",
+            "email": "Email",
+            "deactivate": "Deactivate",
+            "backToUsers": "Back to Users"
+        },
+        "roles": {
+            "title": "Roles & Permissions",
+            "subtitle": "Manage access levels for your team members.",
+            "createRole": "Create Custom Role",
+            "permissions": "Permissions"
+        },
+        "modals": {
+            "addUser": {
+                "title": "Add New User",
+                "firstName": "First Name",
+                "lastName": "Last Name",
+                "email": "Email Address",
+                "role": "Role",
+                "restaurant": "Restaurant",
+                "jobTitle": "Job Title",
+                "sendWelcome": "Send welcome email with login instructions",
+                "assignTraining": "Assign mandatory training based on role",
+                "create": "Create User"
+            },
+            "import": {
+                "title": "Import Users (CSV)",
+                "dragDrop": "Click to upload or drag and drop",
+                "template": "Need a template?",
+                "downloadTemplate": "Download Template",
+                "preview": "Preview",
+                "valid": "Valid",
+                "error": "Error",
+                "import": "Import Users"
+            }
+        },
+        "profile": {
+            "back": "Back to Team",
+            "quickStats": "Quick Stats",
+            "tabs": {
+                "training": "Training",
+                "certificates": "Certificates",
+                "activity": "Activity",
+                "notes": "Notes"
+            },
+            "assignedCourses": "Assigned Courses",
+            "assignNew": "Assign New Course"
+        }
+    },
+    "reports": {
+        "title": "Reports & Analytics",
+        "subtitle": "Track performance, completion rates, and platform usage.",
+        "availableReports": "Available Reports",
+        "filters": {
+            "dateRange": "Date Range",
+            "restaurant": "Restaurant",
+            "category": "Category",
+            "statusLabel": "Status",
+            "apply": "Apply Filters",
+            "clear": "Clear",
+            "allRestaurants": "All Restaurants",
+            "allCategories": "All Categories",
+            "allStatus": "All Status",
+            "ranges": {
+                "last7days": "Last 7 Days",
+                "last30days": "Last 30 Days",
+                "last3months": "Last 3 Months",
+                "lastYear": "Last Year",
+                "custom": "Custom Range"
+            },
+            "status": {
+                "completed": "Completed",
+                "inProgress": "In Progress"
+            }
+        },
+        "overview": {
+            "activeUsers": "Active Users",
+            "totalCourses": "Total Courses",
+            "completionRate": "Completion Rate",
+            "certificates": "Certificates Issued",
+            "totalHours": "Total Training Hours"
+        },
+        "cards": {
+            "completion": {
+                "title": "Course Completion",
+                "desc": "Detailed breakdown of completion rates per course."
+            },
+            "user": {
+                "title": "User Performance",
+                "desc": "Individual progress tracking and compliance status."
+            },
+            "restaurant": {
+                "title": "Restaurant Comparison",
+                "desc": "Compare performance metrics across locations."
+            },
+            "certifications": {
+                "title": "Certifications",
+                "desc": "Track issued certificates and upcoming expirations."
+            },
+            "activity": {
+                "title": "Platform Activity",
+                "desc": "Analyze login trends and peak usage times."
+            },
+            "assessments": {
+                "title": "Assessments Analysis",
+                "desc": "Review quiz scores and question difficulty."
+            }
+        },
+        "actions": {
+            "createCustom": "Create Custom Report",
+            "exportExcel": "Export to Excel",
+            "filter": "Filter"
+        },
+        "views": {
+            "completion": {
+                "title": "Course Completion Report",
+                "chartTitle": "Top 5 Completed Courses",
+                "tableTitle": "Detailed Course Statistics"
+            },
+            "userPerformance": {
+                "title": "User Performance Report"
+            },
+            "restaurant": {
+                "title": "Restaurant Performance Report"
+            },
+            "certifications": {
+                "title": "Certifications Report"
+            },
+            "activity": {
+                "title": "Platform Activity Report",
+                "dailyLogins": "Daily Logins (Last 7 Days)",
+                "peakHours": "Peak Usage Hours",
+                "deviceUsage": "Device Usage"
+            },
+            "assessments": {
+                "title": "Assessments Analysis Report"
+            }
+        },
+        "table": {
+            "course": "Course Name",
+            "enrolled": "Enrolled",
+            "completed": "Completed",
+            "rate": "Completion Rate",
+            "avgScore": "Avg. Score",
+            "name": "Name",
+            "restaurant": "Restaurant",
+            "completedCourses": "Completed Courses",
+            "hours": "Training Hours",
+            "lastActive": "Last Active",
+            "certificates": "Certificates"
+        },
+        "builder": {
+            "title": "Create Custom Report",
+            "reportName": "Report Name",
+            "type": "Report Type",
+            "metrics": "Select Metrics",
+            "schedule": "Schedule & Delivery",
+            "enableSchedule": "Enable automatic scheduling",
+            "frequency": "Frequency",
+            "recipients": "Recipients (comma separated)",
+            "save": "Save Report"
+        }
+    }
+}

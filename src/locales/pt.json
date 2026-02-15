@@ -1,0 +1,532 @@
+{
+    "common": {
+        "loading": "A carregar...",
+        "accessDenied": "Acesso Negado",
+        "accessDeniedMessage": "Não tem permissão para aceder a esta página.",
+        "backToDashboard": "Voltar ao Painel",
+        "export": "Exportar",
+        "exportSuccess": "Exportação com sucesso",
+        "saving": "A guardar...",
+        "error": "Ocorreu um erro",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Apagar",
+        "edit": "Editar",
+        "back": "Voltar",
+        "next": "Seguinte",
+        "search": "Pesquisar",
+        "filter": "Filtrar",
+        "actions": "Ações",
+        "status": "Estado",
+        "date": "Data",
+        "user": "Utilizador",
+        "role": "Função",
+        "restaurant": "Restaurante",
+        "dashboard": "Painel",
+        "courses": "Cursos",
+        "leaderboard": "Classificação",
+        "team": "Equipa",
+        "reports": "Relatórios",
+        "users": "Utilizadores",
+        "announcements": "Anúncios",
+        "settings": "Definições",
+        "tenants": "Restaurantes",
+        "help": "Ajuda",
+        "logout": "Sair",
+        "welcome": "Bem-vindo",
+        "inProgress": "Em Progresso",
+        "continueLearning": "Continuar a Aprender",
+        "browseLibrary": "Navegar na Biblioteca",
+        "noCoursesInProgress": "Nenhum curso em progresso.",
+        "resume": "Retomar",
+        "startCourse": "Iniciar Curso",
+        "completed": "Concluído",
+        "accessedOn": "Acedido em"
+    },
+    "gamification": {
+        "currentLevel": "Nível Atual",
+        "toNextLevel": " XP para o próximo nível",
+        "totalXp": "XP Total",
+        "badges": "Distintivos",
+        "dayStreak": "dias de Sequência",
+        "earned": "Conquistado"
+    },
+    "auth": {
+        "login": {
+            "title": "Bem-vindo de volta",
+            "subtitle": "Inicie sessão na sua conta",
+            "email": "Endereço de email",
+            "password": "Palavra-passe",
+            "submit": "Entrar",
+            "forgotPassword": "Esqueceu-se da palavra-passe?",
+            "noAccount": "Não tem conta? Contacte o seu gestor."
+        }
+    },
+    "admin": {
+        "title": "Painel de Administração",
+        "subtitle": "Visão geral do desempenho da plataforma e métricas principais.",
+        "performanceByRestaurant": "Desempenho por Restaurante",
+        "popularCourses": "Cursos Populares",
+        "systemAlerts": "Alertas do Sistema",
+        "quickActions": "Ações Rápidas",
+        "stats": {
+            "totalUsers": "Total de Utilizadores",
+            "activeCourses": "Cursos Ativos",
+            "completionRate": "Taxa de Conclusão",
+            "certificatesIssued": "Certificados Emitidos"
+        },
+        "actions": {
+            "generateReport": "Gerar Relatório",
+            "manageUsers": "Gerir Utilizadores",
+            "reviewContent": "Rever Conteúdo"
+        }
+    },
+    "dashboard": {
+        "welcome": "Bem-vindo de volta, {{name}}!",
+        "subtitle": "Aqui está o resumo da sua jornada de aprendizagem hoje.",
+        "stats": {
+            "coursesCompleted": "Cursos Concluídos",
+            "hoursLearning": "Horas de Aprendizagem",
+            "certificates": "Certificados",
+            "currentStreak": "Sequência Atual",
+            "averageScore": "Nota Média"
+        },
+        "continueLearning": "Continuar a Aprender",
+        "recommended": "Recomendado para Si",
+        "myProgress": "O Meu Progresso",
+        "recommendedCourses": "Cursos Recomendados",
+        "recentActivity": "Atividade Recente"
+    },
+    "courses": {
+        "title": "Biblioteca de Cursos",
+        "subtitle": "Navegue e inscreva-se em módulos de formação.",
+        "createCourse": "Criar Novo Curso",
+        "editCourse": "Editar Curso",
+        "startCourse": "Iniciar Curso",
+        "mandatory": "Obrigatório",
+        "min": "min",
+        "categories": {
+            "food_safety": "Segurança Alimentar",
+            "service": "Atendimento ao Cliente",
+            "management": "Gestão",
+            "beverage": "Bebidas",
+            "culinary": "Culinária",
+            "compliance": "Conformidade"
+        }
+    },
+    "leaderboard": {
+        "title": "Classificação",
+        "subtitle": "Veja quem está a liderar a jornada de aprendizagem.",
+        "global": "Global",
+        "myRestaurant": "O Meu Restaurante",
+        "topLearners": "Melhores Alunos",
+        "viewAll": "Ver Tudo",
+        "rankings": "Classificações"
+    },
+    "help": {
+        "title": "Como podemos ajudar?",
+        "subtitle": "Pesquise na nossa base de conhecimento ou consulte as perguntas frequentes.",
+        "searchPlaceholder": "Procurar respostas...",
+        "noResults": "Nenhum resultado encontrado para",
+        "cards": {
+            "guides": {
+                "title": "Guias de Utilizador",
+                "desc": "Tutoriais detalhados sobre como usar a plataforma."
+            },
+            "docs": {
+                "title": "Documentação",
+                "desc": "Documentação técnica e documentos de política."
+            },
+            "support": {
+                "title": "Contactar Suporte",
+                "desc": "Entre em contacto com a nossa equipa de suporte."
+            }
+        },
+        "faqTitle": "Perguntas Frequentes",
+        "faqs": {
+            "q1": "Como reponho a minha palavra-passe?",
+            "a1": "Pode repor a sua palavra-passe clicando na ligação 'Esqueci-me da palavra-passe' na página de início de sessão. Siga as instruções enviadas para o seu e-mail.",
+            "q2": "Como acompanho o meu progresso?",
+            "a2": "O seu progresso é apresentado no seu Painel. Pode ver os seus cursos concluídos, nível atual e sequência de aprendizagem.",
+            "q3": "Posso descarregar os meus certificados?",
+            "a3": "Sim! Assim que concluir um curso, é gerado um certificado. Pode vê-lo e descarregá-lo na página Detalhes do Curso ou no seu Perfil.",
+            "q4": "Como contacto o suporte?",
+            "a4": "Se precisar de mais assistência, pode contactar o seu gestor ou utilizar o formulário 'Contactar Suporte' abaixo.",
+            "q5": "O que acontece se eu falhar um prazo?",
+            "a5": "Se falhar um prazo de formação obrigatória, o seu gestor será notificado. Por favor, conclua a formação o mais rapidamente possível."
+        }
+    },
+    "notifications": {
+        "empty": "Sem notificações",
+        "welcome": {
+            "title": "Bem-vindo à plataforma!",
+            "message": "Comece por explorar o seu painel."
+        },
+        "assigned": {
+            "title": "Novo Curso Atribuído",
+            "message": "Foi-lhe atribuído \"Harmonização de Vinhos Avançada\"."
+        }
+    },
+    "announcements": {
+        "title": "Anúncios",
+        "subtitle": "Gerir anúncios globais para a plataforma.",
+        "new": "Novo Anúncio",
+        "createTitle": "Criar Anúncio",
+        "form": {
+            "title": "Título",
+            "titlePlaceholder": "ex: Manutenção do Sistema",
+            "content": "Conteúdo",
+            "contentPlaceholder": "Detalhes do anúncio...",
+            "priority": "Prioridade",
+            "priorities": {
+                "low": "Baixa (Azul)",
+                "medium": "Média (Âmbar)",
+                "high": "Alta (Vermelho)"
+            },
+            "activeImmediately": "Ativo imediatamente",
+            "cancel": "Cancelar",
+            "create": "Criar Anúncio"
+        },
+        "empty": "Sem anúncios ainda",
+        "emptyDesc": "Crie um para comunicar com todos os utilizadores.",
+        "created": "Criado:",
+        "priority": "Prioridade:",
+        "inactive": "Inativo",
+        "mock": {
+            "maintenance": {
+                "title": "Manutenção da Plataforma",
+                "content": "A plataforma estará em manutenção agendada no domingo às 2 da manhã."
+            }
+        }
+    },
+    "settings": {
+        "title": "Definições",
+        "subtitle": "Gerir as preferências e definições da sua conta.",
+        "tabs": {
+            "profile": "Perfil",
+            "notifications": "Notificações",
+            "appearance": "Aparência",
+            "privacy": "Privacidade e Dados",
+            "company": "Configurações do Grupo"
+        },
+        "profile": {
+            "title": "Perfil Pessoal",
+            "subtitle": "Gerir as suas informações pessoais.",
+            "photo": "Foto de Perfil",
+            "changePhoto": "Alterar Foto",
+            "removePhoto": "Remover",
+            "fullName": "Nome Completo",
+            "email": "Endereço de Email",
+            "phone": "Número de Telefone",
+            "restaurant": "Restaurante",
+            "role": "Função",
+            "save": "Guardar Alterações",
+            "password": {
+                "title": "Alterar Palavra-passe",
+                "current": "Palavra-passe Atual",
+                "new": "Nova Palavra-passe",
+                "confirm": "Confirmar Nova Palavra-passe"
+            }
+        },
+        "notifications": {
+            "title": "Preferências de Notificação",
+            "subtitle": "Escolha como deseja ser notificado.",
+            "email": {
+                "title": "Notificações por Email",
+                "assigned": "Novo curso atribuído",
+                "deadline": "Prazo a aproximar-se (3 dias)",
+                "certificate": "Certificado obtido",
+                "newsletter": "Newsletter mensal"
+            },
+            "push": {
+                "title": "Notificações Push",
+                "enable": "Ativar notificações na aplicação"
+            },
+            "reminders": {
+                "title": "Lembretes",
+                "daily": "Lembretes diários para formação pendente"
+            },
+            "frequency": {
+                "label": "Frequência de Resumo por Email",
+                "daily": "Diariamente",
+                "weekly": "Semanalmente",
+                "never": "Nunca"
+            },
+            "save": "Guardar Preferências"
+        },
+        "appearance": {
+            "title": "Definições de Aparência",
+            "subtitle": "Personalize a sua experiência de visualização.",
+            "theme": {
+                "label": "Tema",
+                "light": "Modo Claro",
+                "dark": "Modo Escuro"
+            },
+            "fontSize": {
+                "label": "Tamanho da Fonte",
+                "small": "Pequeno",
+                "medium": "Médio",
+                "large": "Grande"
+            },
+            "language": {
+                "label": "Idioma"
+            },
+            "timezone": {
+                "label": "Fuso Horário"
+            }
+        },
+        "privacy": {
+            "title": "Privacidade e Dados",
+            "subtitle": "Gerir os seus dados e definições de privacidade.",
+            "data": {
+                "title": "Dados Pessoais",
+                "view": "Ver Dados Armazenados",
+                "export": "Exportar Dados (RGPD)"
+            },
+            "security": {
+                "title": "Segurança",
+                "history": "Histórico de Início de Sessão",
+                "devices": "Dispositivos Ativos"
+            }
+        },
+        "company": {
+            "title": "Configurações da Empresa",
+            "subtitle": "Gerir a marca e definições da sua organização.",
+            "branding": {
+                "title": "Marca",
+                "name": "Nome da Empresa",
+                "logo": "Logótipo da Empresa",
+                "upload": "Carregar Logótipo",
+                "primaryColor": "Cor Primária",
+                "secondaryColor": "Cor Secundária"
+            },
+            "support": {
+                "title": "Suporte",
+                "email": "Email de Suporte"
+            },
+            "certificates": {
+                "title": "Certificados",
+                "validity": "Validade Padrão (Meses)"
+            },
+            "save": "Guardar Configurações da Empresa"
+        }
+    },
+    "team": {
+        "title": "Gestão de Equipa",
+        "subtitle": "Gerir utilizadores, funções e permissões.",
+        "stats": {
+            "totalUsers": "Total de Utilizadores",
+            "activeToday": "Ativos Hoje",
+            "newThisMonth": "Novos Este Mês"
+        },
+        "filters": {
+            "searchPlaceholder": "Pesquisar por nome ou email...",
+            "allRestaurants": "Todos os Restaurantes",
+            "allRoles": "Todas as Funções",
+            "allStatus": "Todos os Estados",
+            "moreFilters": "Mais Filtros"
+        },
+        "table": {
+            "user": "Utilizador",
+            "role": "Função",
+            "restaurant": "Restaurante",
+            "progress": "Progresso",
+            "status": "Estado",
+            "actions": "Ações",
+            "selected": "{{count}} utilizadores selecionados"
+        },
+        "actions": {
+            "addUser": "Adicionar Utilizador",
+            "importCsv": "Importar CSV",
+            "manageRoles": "Gerir Funções",
+            "assignTraining": "Atribuir Formação",
+            "email": "Email",
+            "deactivate": "Desativar",
+            "backToUsers": "Voltar a Utilizadores"
+        },
+        "roles": {
+            "title": "Funções e Permissões",
+            "subtitle": "Gerir níveis de acesso para os membros da equipa.",
+            "createRole": "Criar Função Personalizada",
+            "permissions": "Permissões"
+        },
+        "modals": {
+            "addUser": {
+                "title": "Adicionar Novo Utilizador",
+                "firstName": "Nome Próprio",
+                "lastName": "Apelido",
+                "email": "Endereço de Email",
+                "role": "Função",
+                "restaurant": "Restaurante",
+                "jobTitle": "Cargo",
+                "sendWelcome": "Enviar email de boas-vindas com instruções",
+                "assignTraining": "Atribuir formação obrigatória baseada na função",
+                "create": "Criar Utilizador"
+            },
+            "import": {
+                "title": "Importar Utilizadores (CSV)",
+                "dragDrop": "Clique para carregar ou arraste e largue",
+                "template": "Precisa de um modelo?",
+                "downloadTemplate": "Descarregar Modelo",
+                "preview": "Pré-visualização",
+                "valid": "Válido",
+                "error": "Erro",
+                "import": "Importar Utilizadores"
+            }
+        },
+        "profile": {
+            "back": "Voltar à Equipa",
+            "quickStats": "Estatísticas Rápidas",
+            "tabs": {
+                "training": "Formação",
+                "certificates": "Certificados",
+                "activity": "Atividade",
+                "notes": "Notas"
+            },
+            "assignedCourses": "Cursos Atribuídos",
+            "assignNew": "Atribuir Novo Curso"
+        }
+    },
+    "reports": {
+        "title": "Relatórios e Análises",
+        "subtitle": "Acompanhe o desempenho, taxas de conclusão e uso da plataforma.",
+        "availableReports": "Relatórios Disponíveis",
+        "filters": {
+            "dateRange": "Período",
+            "restaurant": "Restaurante",
+            "category": "Categoria",
+            "statusLabel": "Estado",
+            "apply": "Aplicar Filtros",
+            "clear": "Limpar",
+            "allRestaurants": "Todos os Restaurantes",
+            "allCategories": "Todas as Categorias",
+            "allStatus": "Todos os Estados",
+            "ranges": {
+                "last7days": "Últimos 7 Dias",
+                "last30days": "Últimos 30 Dias",
+                "last3months": "Últimos 3 Meses",
+                "lastYear": "Último Ano",
+                "custom": "Personalizado"
+            },
+            "status": {
+                "completed": "Concluído",
+                "inProgress": "Em Progresso"
+            }
+        },
+        "overview": {
+            "activeUsers": "Utilizadores Ativos",
+            "totalCourses": "Total de Cursos",
+            "completionRate": "Taxa de Conclusão",
+            "certificates": "Certificados Emitidos",
+            "totalHours": "Horas de Formação"
+        },
+        "cards": {
+            "completion": {
+                "title": "Conclusão de Cursos",
+                "desc": "Detalhamento das taxas de conclusão por curso."
+            },
+            "user": {
+                "title": "Performance por Utilizador",
+                "desc": "Acompanhamento individual e status de conformidade."
+            },
+            "restaurant": {
+                "title": "Comparação de Restaurantes",
+                "desc": "Compare métricas de desempenho entre locais."
+            },
+            "certifications": {
+                "title": "Certificações",
+                "desc": "Acompanhe certificados emitidos e expirações."
+            },
+            "activity": {
+                "title": "Atividade da Plataforma",
+                "desc": "Analise tendências de login e horários de pico."
+            },
+            "assessments": {
+                "title": "Análise de Avaliações",
+                "desc": "Revise pontuações de testes e dificuldade das questões."
+            }
+        },
+        "actions": {
+            "createCustom": "Criar Relatório Personalizado",
+            "exportExcel": "Exportar Excel",
+            "filter": "Filtrar"
+        },
+        "views": {
+            "completion": {
+                "title": "Relatório de Conclusão de Cursos",
+                "chartTitle": "Top 5 Cursos Concluídos",
+                "tableTitle": "Estatísticas Detalhadas do Curso"
+            },
+            "userPerformance": {
+                "title": "Relatório de Performance do Utilizador"
+            },
+            "restaurant": {
+                "title": "Relatório de Performance por Restaurante"
+            },
+            "certifications": {
+                "title": "Relatório de Certificações"
+            },
+            "activity": {
+                "title": "Relatório de Atividade da Plataforma",
+                "dailyLogins": "Logins Diários (Últimos 7 Dias)",
+                "peakHours": "Horários de Pico",
+                "deviceUsage": "Uso por Dispositivo"
+            },
+            "assessments": {
+                "title": "Relatório de Análise de Avaliações"
+            }
+        },
+        "table": {
+            "course": "Nome do Curso",
+            "enrolled": "Inscritos",
+            "completed": "Concluídos",
+            "rate": "Taxa de Conclusão",
+            "avgScore": "Nota Média",
+            "name": "Nome",
+            "restaurant": "Restaurante",
+            "completedCourses": "Cursos Concluídos",
+            "hours": "Horas de Formação",
+            "lastActive": "Última Atividade",
+            "certificates": "Certificados"
+        },
+        "builder": {
+            "title": "Criar Relatório Personalizado",
+            "reportName": "Nome do Relatório",
+            "type": "Tipo de Relatório",
+            "metrics": "Selecionar Métricas",
+            "schedule": "Agendamento e Envio",
+            "enableSchedule": "Ativar agendamento automático",
+            "frequency": "Frequência",
+            "recipients": "Destinatários (separados por vírgula)",
+            "save": "Salvar Relatório"
+        }
+    },
+    "tenantManagement": {
+        "title": "Gestão de Restaurantes",
+        "subtitle": "Gerencie os restaurantes do grupo e suas configurações.",
+        "new": "Novo Restaurante",
+        "createTitle": "Criar Novo Restaurante",
+        "editTitle": "Editar Restaurante",
+        "form": {
+            "name": "Nome do Restaurante",
+            "namePlaceholder": "ex: Mare Lisboa",
+            "slug": "Slug (URL)",
+            "slugPlaceholder": "acme-corp",
+            "domain": "Domínio Personalizado",
+            "domainPlaceholder": "training.acme.com",
+            "maxSeats": "Lugares Máximos",
+            "primaryColor": "Cor Primária",
+            "status": "Estado",
+            "cancel": "Cancelar",
+            "create": "Criar Restaurante",
+            "update": "Atualizar Restaurante",
+            "active": "Ativo",
+            "trial": "Trial",
+            "inactive": "Inativo"
+        },
+        "card": {
+            "maxSeats": "Lugares Máx.",
+            "created": "Criado",
+            "edit": "Editar"
+        }
+    }
