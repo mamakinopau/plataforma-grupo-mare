@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDataStore } from '../../store/useDataStore';
+import { supabase } from '../../lib/supabase';
 import { Button } from '../../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../../components/ui/Card';
 import { Modal } from '../../components/ui/Modal';
@@ -131,26 +132,30 @@ export function CourseEditor() {
     const [thumbnailUrl, setThumbnailUrl] = useState(existingCourse?.thumbnailUrl || '');
 
     const handleFileUpload = async (file: File, type: 'thumbnail' | 'lesson', sIndex?: number, lIndex?: number) => {
-        const formData = new FormData();
-        formData.append('file', file);
         setUploading(type === 'thumbnail' ? 'thumbnail' : `lesson-${sIndex}-${lIndex}`);
 
         try {
-            const response = await fetch('http://localhost:3001/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await response.json();
-            if (data.url) {
-                if (type === 'thumbnail') {
-                    setThumbnailUrl(data.url);
-                } else if (sIndex !== undefined && lIndex !== undefined) {
-                    updateLesson(sIndex, lIndex, { content: data.url });
-                }
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${type}s/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('course-content')
+                .upload(fileName, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('course-content')
+                .getPublicUrl(fileName);
+
+            if (type === 'thumbnail') {
+                setThumbnailUrl(publicUrl);
+            } else if (sIndex !== undefined && lIndex !== undefined) {
+                updateLesson(sIndex, lIndex, { content: publicUrl });
             }
         } catch (error) {
             console.error('Upload failed:', error);
-            alert('Falha no upload. Verifique se o backend está rodando em http://localhost:3001');
+            alert('Falha no upload. Verifique as permissões de Storage.');
         } finally {
             setUploading(null);
         }

@@ -5,6 +5,7 @@ import { Input } from '../ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { User, Camera, Trash2 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
+import { supabase } from '../../lib/supabase';
 
 export function ProfileSettings() {
     const { t } = useTranslation();
@@ -16,22 +17,27 @@ export function ProfileSettings() {
     const [uploading, setUploading] = useState(false);
 
     const handleFileUpload = async (file: File) => {
-        const formData = new FormData();
-        formData.append('file', file);
+        if (!user) return;
         setUploading(true);
 
         try {
-            const response = await fetch('http://localhost:3001/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await response.json();
-            if (data.url) {
-                setPhotoUrl(data.url);
-            }
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(fileName, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+
+            setPhotoUrl(publicUrl);
         } catch (error) {
             console.error('Upload failed:', error);
-            alert('Falha no upload da foto.');
+            alert('Falha no upload da foto. Verifique as permissões de Storage.');
         } finally {
             setUploading(false);
         }
