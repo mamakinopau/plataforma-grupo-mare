@@ -4,6 +4,8 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { User, Camera, Trash2 } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
+import { supabase } from '../../lib/supabase';
 import { useDataStore } from '../../store/useDataStore';
 
 export function ProfileSettings() {
