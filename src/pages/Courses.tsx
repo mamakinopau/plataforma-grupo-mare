@@ -26,7 +26,7 @@ export function Courses() {
                     <h1 className="text-2xl font-bold text-gray-900">{t('courses.title')}</h1>
                     <p className="text-gray-500">{t('courses.subtitle')}</p>
                 </div>
-                {user && (user.role === 'admin' || user.role === 'manager') && (
+                {user && (user.role === 'admin' || user.role === 'manager' || user.role === 'super_admin') && (
                     <Link to="/admin/courses/new">
                         <Button>
                             <Plus className="w-4 h-4 mr-2" />

@@ -68,7 +68,20 @@ export const useDataStore = create<DataState>((set, get) => ({
             console.log('[DataStore] Loaded tenants:', mappedTenants);
 
             set({
-                courses: courses || [],
+                courses: (courses as any[])?.map(c => ({
+                    ...c,
+                    durationMinutes: c.duration_minutes,
+                    isMandatory: c.is_mandatory,
+                    targetRoles: c.target_roles,
+                    thumbnailUrl: c.thumbnail_url,
+                    validityMonths: c.validity_months,
+                    createdAt: c.created_at,
+                    updatedAt: c.updated_at,
+                    tenantIds: c.tenant_ids,
+                    // Ensure sections is array
+                    sections: Array.isArray(c.sections) ? c.sections : []
+                })) || [],
+                categories: categories || [],
                 tenants: mappedTenants,
                 users: (profiles as any[])?.map(p => ({
                     ...p,
@@ -139,28 +152,79 @@ export const useDataStore = create<DataState>((set, get) => ({
     },
 
     addCourse: async (courseData) => {
+        // Map to snake_case
+        const dbCourse = {
+            title: courseData.title,
+            description: courseData.description,
+            category: courseData.category,
+            duration_minutes: courseData.durationMinutes,
+            is_mandatory: courseData.isMandatory,
+            target_roles: courseData.targetRoles,
+            status: courseData.status,
+            sections: courseData.sections,
+            thumbnail_url: courseData.thumbnailUrl,
+            validity_months: courseData.validityMonths,
+            tenant_ids: courseData.tenantIds,
+            // Let DB handle created_at
+        };
+
         const { data, error } = await supabase
             .from('courses')
-            .insert(courseData)
+            .insert(dbCourse)
             .select()
             .single();
 
-        if (data && !error) {
-            set(state => ({ courses: [...state.courses, data as Course] }));
+        if (error) {
+            console.error('Error adding course:', error);
+            throw error;
+        }
+
+        if (data) {
+            const newCourse: Course = {
+                ...courseData,
+                id: data.id,
+                createdAt: data.created_at,
+                // re-map back just in case
+                durationMinutes: data.duration_minutes,
+                isMandatory: data.is_mandatory,
+                targetRoles: data.target_roles,
+                thumbnailUrl: data.thumbnail_url,
+                validityMonths: data.validity_months,
+                tenantIds: data.tenant_ids
+            };
+            set(state => ({ courses: [...state.courses, newCourse] }));
         }
     },
 
     updateCourse: async (id, updates) => {
+        // Map to snake_case
+        const dbUpdates: any = {};
+        if (updates.title) dbUpdates.title = updates.title;
+        if (updates.description) dbUpdates.description = updates.description;
+        if (updates.category) dbUpdates.category = updates.category;
+        if (updates.durationMinutes !== undefined) dbUpdates.duration_minutes = updates.durationMinutes;
+        if (updates.isMandatory !== undefined) dbUpdates.is_mandatory = updates.isMandatory;
+        if (updates.targetRoles) dbUpdates.target_roles = updates.targetRoles;
+        if (updates.status) dbUpdates.status = updates.status;
+        if (updates.sections) dbUpdates.sections = updates.sections;
+        if (updates.thumbnailUrl) dbUpdates.thumbnail_url = updates.thumbnailUrl;
+        if (updates.validityMonths !== undefined) dbUpdates.validity_months = updates.validityMonths;
+        if (updates.tenantIds) dbUpdates.tenant_ids = updates.tenantIds;
+        dbUpdates.updated_at = new Date().toISOString();
+
         const { error } = await supabase
             .from('courses')
-            .update(updates)
+            .update(dbUpdates)
             .eq('id', id);
 
-        if (!error) {
-            set(state => ({
-                courses: state.courses.map(c => c.id === id ? { ...c, ...updates } : c)
-            }));
+        if (error) {
+            console.error('Error updating course:', error);
+            throw error;
         }
+
+        set(state => ({
+            courses: state.courses.map(c => c.id === id ? { ...c, ...updates } : c)
+        }));
     },
 
     addCategory: async (category) => {
