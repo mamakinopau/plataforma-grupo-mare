@@ -35,6 +35,7 @@ async function testCourses() {
         }
     }
 
+    /*
     // 2. Try to insert a dummy course (Write access) using snake_case
     console.log('\n2. Attempting to insert a dummy course (snake_case)...');
     const dummyCourse = {
@@ -69,6 +70,7 @@ async function testCourses() {
         console.log('Cleaning up...');
         await supabase.from('courses').delete().eq('id', newCourse.id);
     }
+    */
 }
 
 testCourses();

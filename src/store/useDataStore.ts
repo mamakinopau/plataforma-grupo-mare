@@ -70,6 +70,7 @@ export const useDataStore = create<DataState>((set, get) => ({
             set({
                 courses: (courses as any[])?.map(c => ({
                     ...c,
+                    category: c.category_id, // Map category_id -> category
                     durationMinutes: c.duration_minutes,
                     isMandatory: c.is_mandatory,
                     targetRoles: c.target_roles,
@@ -156,7 +157,7 @@ export const useDataStore = create<DataState>((set, get) => ({
         const dbCourse = {
             title: courseData.title,
             description: courseData.description,
-            category: courseData.category,
+            category_id: courseData.category, // Map category -> category_id
             duration_minutes: courseData.durationMinutes,
             is_mandatory: courseData.isMandatory,
             target_roles: courseData.targetRoles,
@@ -201,7 +202,7 @@ export const useDataStore = create<DataState>((set, get) => ({
         const dbUpdates: any = {};
         if (updates.title) dbUpdates.title = updates.title;
         if (updates.description) dbUpdates.description = updates.description;
-        if (updates.category) dbUpdates.category = updates.category;
+        if (updates.category) dbUpdates.category_id = updates.category; // Map category -> category_id
         if (updates.durationMinutes !== undefined) dbUpdates.duration_minutes = updates.durationMinutes;
         if (updates.isMandatory !== undefined) dbUpdates.is_mandatory = updates.isMandatory;
         if (updates.targetRoles) dbUpdates.target_roles = updates.targetRoles;
