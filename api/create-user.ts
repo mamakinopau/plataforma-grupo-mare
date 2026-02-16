@@ -24,7 +24,14 @@ export default async function handler(req, res) {
     }
 
     if (!supabaseUrl || !supabaseServiceKey) {
-        return res.status(500).json({ error: 'Missing Supabase configuration' });
+        console.error('Configuration Error:', {
+            hasUrl: !!supabaseUrl,
+            hasKey: !!supabaseServiceKey
+        });
+        return res.status(500).json({
+            error: 'Missing Supabase configuration',
+            details: `URL: ${!!supabaseUrl}, Key: ${!!supabaseServiceKey}`
+        });
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
