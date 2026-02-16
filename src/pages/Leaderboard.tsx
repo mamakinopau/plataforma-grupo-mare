@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Crown } from 'lucide-react';
 
-import { cn } from '../lib/utils';
+import { cn, getAvatarUrl } from '../lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import { useDataStore } from '../store/useDataStore';
@@ -100,10 +100,10 @@ export function Leaderboard() {
                                 </div>
                                 <div className="relative">
                                     <img
-                                        src={user.avatarUrl}
+                                        src={getAvatarUrl(user.name, user.avatarUrl)}
                                         alt={user.name}
                                         className={cn(
-                                            "w-20 h-20 rounded-full border-4 mb-3",
+                                            "w-20 h-20 rounded-full border-4 mb-3 object-cover",
                                             index === 0 ? "border-yellow-400" :
                                                 index === 1 ? "border-gray-300" :
                                                     "border-orange-300"
@@ -174,7 +174,11 @@ export function Leaderboard() {
                                         <div className="w-8 h-8 flex items-center justify-center font-bold text-gray-400">
                                             {index + 4}
                                         </div>
-                                        <img src={user.avatarUrl} alt={user.name} className="w-10 h-10 rounded-full" />
+                                        <img
+                                            src={getAvatarUrl(user.name, user.avatarUrl)}
+                                            alt={user.name}
+                                            className="w-10 h-10 rounded-full object-cover"
+                                        />
                                         <div>
                                             <p className="font-medium text-gray-900">{user.name}</p>
                                             <div className="flex items-center gap-2 text-xs text-gray-500">
