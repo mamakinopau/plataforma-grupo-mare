@@ -24,7 +24,9 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
     const [tenantId, setTenantId] = useState('');
     const [position, setPosition] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!firstName || !lastName || !email || !tenantId) {
@@ -32,32 +34,41 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
             return;
         }
 
-        addUser({
-            id: Math.random().toString(36).substr(2, 9),
-            name: `${firstName} ${lastName}`,
-            email,
-            role,
-            tenantId,
-            position,
-            isActive: true,
-            joinedAt: new Date().toISOString().split('T')[0],
-            onboardingCompleted: false,
-            preferences: {
-                emailNotifications: true,
-                pushNotifications: false,
-                marketingEmails: false
-            }
-        });
+        setIsLoading(true);
 
-        alert('Usuário criado com sucesso!');
-        onClose();
+        try {
+            await addUser({
+                // ID will be assigned by the server
+                id: '',
+                name: `${firstName} ${lastName}`,
+                email,
+                role,
+                tenantId,
+                position,
+                isActive: true,
+                joinedAt: new Date().toISOString().split('T')[0],
+                onboardingCompleted: false,
+                preferences: {
+                    emailNotifications: true,
+                    pushNotifications: false,
+                    marketingEmails: false
+                }
+            });
 
-        // Reset form
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setTenantId('');
-        setPosition('');
+            alert('Usuário criado com sucesso! A password temporária é: TempPassword123!');
+            onClose();
+
+            // Reset form
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setTenantId('');
+            setPosition('');
+        } catch (error) {
+            alert(`Erro ao criar utilizador: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const restaurantOptions = tenants.map(t => ({
@@ -134,8 +145,8 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
-                    <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-                    <Button type="submit">Criar Usuário</Button>
+                    <Button type="button" variant="ghost" onClick={onClose} disabled={isLoading}>Cancelar</Button>
+                    <Button type="submit" disabled={isLoading}>{isLoading ? 'A criar...' : 'Criar Usuário'}</Button>
                 </div>
             </form>
         </Modal>

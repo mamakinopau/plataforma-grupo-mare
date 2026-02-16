@@ -167,15 +167,42 @@ export const useDataStore = create<DataState>((set, get) => ({
     },
 
     addUser: async (user) => {
-        // Note: Creating a user usually requires Supabase Auth Admin API or sign up
-        // Here we just insert into profiles for simplicity as per the transition plan
-        // In a real scenario, we'd call a cloud function to create the auth user
-        const { error } = await supabase
-            .from('profiles')
-            .insert(user);
+        try {
+            // Call our Vercel Serverless Function
+            const response = await fetch('/api/create-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: user.email,
+                    password: 'TempPassword123!', // Default temporary password
+                    name: user.name,
+                    role: user.role,
+                    tenantId: user.tenantId,
+                    position: user.position,
+                    userData: {
+                        onboarding_completed: user.onboardingCompleted,
+                        joined_at: user.joinedAt
+                    }
+                }),
+            });
 
-        if (!error) {
-            set(state => ({ users: [...state.users, user] }));
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to create user');
+            }
+
+            const { user: newUser } = await response.json();
+
+            // Optimistically update the local store
+            // We use the ID returned from the server (though in this flow we might wait for a refresh)
+            // But adding it locally provides immediate feedback
+            set(state => ({ users: [...state.users, { ...user, id: newUser.id }] }));
+
+        } catch (error) {
+            console.error('Error creating user:', error);
+            throw error; // Re-throw to be handled by the component
         }
     },
 
