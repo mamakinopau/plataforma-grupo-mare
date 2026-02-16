@@ -75,16 +75,22 @@ export function TenantManagement() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.name || !formData.slug) return;
 
-        if (editingId) {
-            updateTenant(editingId, formData);
-        } else {
-            addTenant(formData as Omit<Tenant, 'id' | 'createdAt'>);
+        try {
+            if (editingId) {
+                await updateTenant(editingId, formData);
+            } else {
+                await addTenant(formData as Omit<Tenant, 'id' | 'createdAt'>);
+            }
+            alert(editingId ? 'Restaurante atualizado com sucesso!' : 'Restaurante criado com sucesso!');
+            resetForm();
+        } catch (error) {
+            console.error('Failed to save tenant:', error);
+            alert('Erro ao gravar restaurante. Verifique a console para mais detalhes.');
         }
-        resetForm();
     };
 
     return (

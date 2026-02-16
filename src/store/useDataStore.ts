@@ -315,11 +315,14 @@ export const useDataStore = create<DataState>((set, get) => ({
             .update(dbUpdates)
             .eq('id', id);
 
-        if (!error) {
-            set(state => ({
-                tenants: state.tenants.map(t => t.id === id ? { ...t, ...updates } : t)
-            }));
+        if (error) {
+            console.error('Error updating tenant:', error);
+            throw error;
         }
+
+        set(state => ({
+            tenants: state.tenants.map(t => t.id === id ? { ...t, ...updates } : t)
+        }));
     },
 
     deleteTenant: async (id) => {
