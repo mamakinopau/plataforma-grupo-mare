@@ -29,10 +29,10 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!firstName || !lastName || !email || !tenantId) {
-            alert('Por favor preencha todos os campos obrigatórios.');
-            return;
-        }
+        if (!firstName) { alert('Por favor preencha o Primeiro Nome.'); return; }
+        if (!lastName) { alert('Por favor preencha o Apelido.'); return; }
+        if (!email) { alert('Por favor preencha o Email.'); return; }
+        if (!tenantId) { alert('Por favor selecione um Restaurante.'); return; }
 
         setIsLoading(true);
 
@@ -71,10 +71,13 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
         }
     };
 
-    const restaurantOptions = tenants.map(t => ({
-        value: t.id,
-        label: t.name
-    }));
+    const restaurantOptions = [
+        { value: '', label: 'Selecione um restaurante...' },
+        ...tenants.map(t => ({
+            value: t.id,
+            label: t.name
+        }))
+    ];
 
     const roleOptions = [
         { value: 'employee', label: 'Empregado' },
