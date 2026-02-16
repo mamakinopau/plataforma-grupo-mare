@@ -72,6 +72,7 @@ export const useDataStore = create<DataState>((set, get) => ({
                 tenants: mappedTenants,
                 users: (profiles as any[])?.map(p => ({
                     ...p,
+                    avatarUrl: p.avatar_url,
                     role: p.role as any,
                     tenantId: p.tenant_id,
                     isActive: p.is_active,

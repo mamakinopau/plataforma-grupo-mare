@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -28,7 +29,13 @@ async function debugData() {
 
     console.log('\nUsers found:', users?.length);
     users?.forEach(u => {
-        console.log(`- User: ${u.name} | Role: ${u.role} | TenantID: ${u.tenant_id} | Avatar: ${u.avatar_url}`);
+        console.log(`\nUser: ${u.name}`);
+        console.log(`Role: ${u.role}`);
+        console.log(`TenantID: ${u.tenant_id}`);
+        console.log(`Avatar URL: ${u.avatar_url}`);
+        if (u.avatar_url) {
+            console.log(`   -> Check: ${u.avatar_url.includes('public') ? 'Public URL' : 'Signed/Private URL?'}`);
+        }
     });
 
     // 2. Fetch Tenants
@@ -60,6 +67,9 @@ async function debugData() {
             console.log(`⚠️ User ${u.name} has NO tenant_id.`);
         }
     });
+    // Write to JSON file for reliable reading
+    fs.writeFileSync('debug_users.json', JSON.stringify(users, null, 2));
+    console.log('Dumped users to debug_users.json');
 }
 
 debugData();
