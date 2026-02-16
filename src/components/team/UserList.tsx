@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { useDataStore } from '../../store/useDataStore';
 import { User } from '../../types';
+import { getAvatarUrl } from '../../lib/utils';
 
 interface UserListProps {
     users: User[];
@@ -132,7 +133,7 @@ export function UserList({ users, onUserClick, onEdit, onDelete }: UserListProps
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3 cursor-pointer" onClick={() => onUserClick(user.id)}>
                                             <img
-                                                src={user.avatarUrl}
+                                                src={getAvatarUrl(user.name, user.avatarUrl)}
                                                 alt={user.name}
                                                 className="w-10 h-10 rounded-full bg-gray-200 object-cover"
                                             />
