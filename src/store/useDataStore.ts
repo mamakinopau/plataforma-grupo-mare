@@ -55,8 +55,17 @@ export const useDataStore = create<DataState>((set, get) => ({
 
             set({
                 courses: courses || [],
-                tenants: tenants || [],
-                categories: categories || [],
+                tenants: (tenants as any[])?.map(t => ({
+                    id: t.id,
+                    name: t.name,
+                    slug: t.slug,
+                    domain: t.domain,
+                    logoUrl: t.logo_url,
+                    theme: t.theme,
+                    maxSeats: t.max_seats,
+                    subscriptionStatus: t.subscription_status,
+                    createdAt: t.created_at
+                })) || [],
                 users: (profiles as any[])?.map(p => ({
                     ...p,
                     role: p.role as any,
@@ -258,21 +267,52 @@ export const useDataStore = create<DataState>((set, get) => ({
     },
 
     addTenant: async (tenantData) => {
+        // Map to snake_case for DB
+        const dbTenant = {
+            name: tenantData.name,
+            slug: tenantData.slug,
+            domain: tenantData.domain,
+            logo_url: tenantData.logoUrl,
+            theme: tenantData.theme,
+            max_seats: tenantData.maxSeats,
+            subscription_status: tenantData.subscriptionStatus,
+        };
+
         const { data, error } = await supabase
             .from('tenants')
-            .insert(tenantData)
+            .insert(dbTenant)
             .select()
             .single();
 
         if (data && !error) {
-            set(state => ({ tenants: [...state.tenants, data as Tenant] }));
+            const newTenant: Tenant = {
+                id: data.id,
+                name: data.name,
+                slug: data.slug,
+                domain: data.domain,
+                logoUrl: data.logo_url,
+                theme: data.theme,
+                maxSeats: data.max_seats,
+                subscriptionStatus: data.subscription_status,
+                createdAt: data.created_at
+            };
+            set(state => ({ tenants: [...state.tenants, newTenant] }));
         }
     },
 
     updateTenant: async (id, updates) => {
+        const dbUpdates: any = {};
+        if (updates.name) dbUpdates.name = updates.name;
+        if (updates.slug) dbUpdates.slug = updates.slug;
+        if (updates.domain) dbUpdates.domain = updates.domain;
+        if (updates.logoUrl) dbUpdates.logo_url = updates.logoUrl;
+        if (updates.theme) dbUpdates.theme = updates.theme;
+        if (updates.maxSeats) dbUpdates.max_seats = updates.maxSeats;
+        if (updates.subscriptionStatus) dbUpdates.subscription_status = updates.subscriptionStatus;
+
         const { error } = await supabase
             .from('tenants')
-            .update(updates)
+            .update(dbUpdates)
             .eq('id', id);
 
         if (!error) {
