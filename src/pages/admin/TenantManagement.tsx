@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
-import { Plus, Building, Users, Globe, Edit2, Trash2, Check, X } from 'lucide-react';
+import { Plus, Building, Users, Globe, Edit2, Trash2, Check, X, Camera } from 'lucide-react';
 import { useDataStore } from '../../store/useDataStore';
 import { Tenant } from '../../types';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../../lib/supabase';
 
 export function TenantManagement() {
     const { tenants, addTenant, updateTenant, deleteTenant } = useDataStore();
@@ -13,12 +14,14 @@ export function TenantManagement() {
 
     const [isCreating, setIsCreating] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
 
     // Form State
     const [formData, setFormData] = useState<Partial<Tenant>>({
         name: '',
         slug: '',
         domain: '',
+        logoUrl: '',
         maxSeats: 50,
         subscriptionStatus: 'trial',
         theme: { primaryColor: '#0f172a', secondaryColor: '#3b82f6' }
@@ -29,6 +32,7 @@ export function TenantManagement() {
             name: '',
             slug: '',
             domain: '',
+            logoUrl: '',
             maxSeats: 50,
             subscriptionStatus: 'trial',
             theme: { primaryColor: '#0f172a', secondaryColor: '#3b82f6' }
@@ -38,9 +42,37 @@ export function TenantManagement() {
     };
 
     const handleEdit = (tenant: Tenant) => {
-        setFormData(tenant);
+        setFormData({
+            ...tenant,
+            theme: tenant.theme || { primaryColor: '#0f172a', secondaryColor: '#3b82f6' }
+        });
         setEditingId(tenant.id);
         setIsCreating(true);
+    };
+
+    const handleLogoUpload = async (file: File) => {
+        setUploading(true);
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `tenant-${Date.now()}.${fileExt}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(fileName, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+
+            setFormData(prev => ({ ...prev, logoUrl: publicUrl }));
+        } catch (error) {
+            console.error('Upload failed:', error);
+            alert('Falha no upload do logo. Verifique as permissões.');
+        } finally {
+            setUploading(false);
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -77,6 +109,39 @@ export function TenantManagement() {
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="flex justify-center mb-6">
+                                <div className="relative group">
+                                    <div
+                                        className="w-24 h-24 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden bg-gray-50"
+                                        style={{ backgroundColor: formData.logoUrl ? 'white' : formData.theme?.primaryColor || '#0f172a' }}
+                                    >
+                                        {formData.logoUrl ? (
+                                            <img src={formData.logoUrl} alt="Logo" className="w-full h-full object-contain" />
+                                        ) : (
+                                            <span className="text-white font-bold text-2xl">
+                                                {formData.name?.substring(0, 2).toUpperCase() || 'LOGO'}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <label htmlFor="logo-upload" className="absolute bottom-[-10px] right-[-10px] p-2 bg-white rounded-full shadow-md cursor-pointer hover:bg-gray-50 border border-gray-200">
+                                        <Camera className="w-4 h-4 text-gray-600" />
+                                        <input
+                                            id="logo-upload"
+                                            type="file"
+                                            className="hidden"
+                                            accept="image/*"
+                                            onChange={(e) => e.target.files?.[0] && handleLogoUpload(e.target.files[0])}
+                                            disabled={uploading}
+                                        />
+                                    </label>
+                                    {uploading && (
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">{t('tenantManagement.form.name')}</label>
