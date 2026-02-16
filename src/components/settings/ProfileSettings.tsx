@@ -54,6 +54,8 @@ export function ProfileSettings() {
         e.preventDefault();
         setIsLoading(true);
 
+        console.log('[ProfileSettings] Saving user with photoUrl:', photoUrl);
+
         updateUser({
             name,
             email,

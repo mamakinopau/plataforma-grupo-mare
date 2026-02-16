@@ -19,7 +19,7 @@ async function debugData() {
     // 1. Fetch Users (Profiles)
     const { data: users, error: userError } = await supabase
         .from('profiles')
-        .select('id, name, email, role, tenant_id');
+        .select('id, name, email, role, tenant_id, avatar_url');
 
     if (userError) {
         console.error('Error fetching users:', userError);
@@ -28,7 +28,7 @@ async function debugData() {
 
     console.log('\nUsers found:', users?.length);
     users?.forEach(u => {
-        console.log(`- User: ${u.name} (${u.email}) | Role: ${u.role} | TenantID: ${u.tenant_id}`);
+        console.log(`- User: ${u.name} | Role: ${u.role} | TenantID: ${u.tenant_id} | Avatar: ${u.avatar_url}`);
     });
 
     // 2. Fetch Tenants
