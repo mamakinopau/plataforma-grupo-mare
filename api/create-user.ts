@@ -4,7 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export default async function handler(req, res) {
+// @ts-ignore
+export default async function handler(req: any, res: any) {
     // CORS policies
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -78,8 +79,8 @@ export default async function handler(req, res) {
 
         return res.status(200).json({ user: authUser.user, message: 'User created successfully' });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating user:', error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message || 'An unknown error occurred' });
     }
 }
