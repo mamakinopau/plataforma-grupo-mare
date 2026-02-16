@@ -114,7 +114,33 @@ export function Leaderboard() {
                                     )}
                                 </div>
                                 <h3 className="font-bold text-gray-900 text-lg">{user.name}</h3>
-                                <p className="text-sm text-gray-500 mb-2">{user.position || user.role} • {tenants.find(t => t.id === user.tenantId)?.name || 'Restaurante'}</p>
+                                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-2">
+                                    <span>{user.position || user.role}</span>
+                                    <span>•</span>
+                                    <div className="flex items-center gap-1">
+                                        {(() => {
+                                            const tenant = tenants.find(t => t.id === user.tenantId);
+                                            if (!tenant) return <span>Restaurante</span>;
+
+                                            return (
+                                                <>
+                                                    {tenant.logoUrl ? (
+                                                        <img
+                                                            src={tenant.logoUrl}
+                                                            alt={tenant.name}
+                                                            className="w-4 h-4 rounded-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold">
+                                                            {tenant.name.substring(0, 1)}
+                                                        </span>
+                                                    )}
+                                                    <span>{tenant.name}</span>
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
+                                </div>
 
                                 <div className="bg-white px-4 py-1 rounded-full shadow-sm border border-gray-100">
                                     <span className="font-bold text-primary-600">{user.points} XP</span>
@@ -140,7 +166,33 @@ export function Leaderboard() {
                                         <img src={user.avatarUrl} alt={user.name} className="w-10 h-10 rounded-full" />
                                         <div>
                                             <p className="font-medium text-gray-900">{user.name}</p>
-                                            <p className="text-xs text-gray-500">{user.position || user.role} • {tenants.find(t => t.id === user.tenantId)?.name || 'Restaurante'}</p>
+                                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                <span>{user.position || user.role}</span>
+                                                <span>•</span>
+                                                <div className="flex items-center gap-1">
+                                                    {(() => {
+                                                        const tenant = tenants.find(t => t.id === user.tenantId);
+                                                        if (!tenant) return <span>Restaurante</span>;
+
+                                                        return (
+                                                            <>
+                                                                {tenant.logoUrl ? (
+                                                                    <img
+                                                                        src={tenant.logoUrl}
+                                                                        alt={tenant.name}
+                                                                        className="w-3 h-3 rounded-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <span className="w-3 h-3 rounded-full bg-gray-200 flex items-center justify-center text-[6px] font-bold">
+                                                                        {tenant.name.substring(0, 1)}
+                                                                    </span>
+                                                                )}
+                                                                <span>{tenant.name}</span>
+                                                            </>
+                                                        );
+                                                    })()}
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>

@@ -148,7 +148,29 @@ export function UserList({ users, onUserClick, onEdit, onDelete }: UserListProps
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-gray-600">
-                                        {tenants.find(t => t.id === user.tenantId)?.name || 'Restaurante'}
+                                        <div className="flex items-center gap-2">
+                                            {(() => {
+                                                const tenant = tenants.find(t => t.id === user.tenantId);
+                                                if (!tenant) return <span>Restaurante</span>;
+
+                                                return (
+                                                    <>
+                                                        {tenant.logoUrl ? (
+                                                            <img
+                                                                src={tenant.logoUrl}
+                                                                alt={tenant.name}
+                                                                className="w-5 h-5 rounded-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold">
+                                                                {tenant.name.substring(0, 1)}
+                                                            </span>
+                                                        )}
+                                                        <span>{tenant.name}</span>
+                                                    </>
+                                                );
+                                            })()}
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <div className="w-full max-w-[140px]">
