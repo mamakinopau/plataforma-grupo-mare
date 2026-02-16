@@ -4,12 +4,15 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { useDataStore } from '../../store/useDataStore';
 
+import { User } from '../../types';
+
 interface UserListProps {
+    users: User[];
     onUserClick: (userId: string) => void;
 }
 
-export function UserList({ onUserClick }: UserListProps) {
-    const { users, tenants, progress, courses } = useDataStore();
+export function UserList({ users, onUserClick }: UserListProps) {
+    const { tenants, progress, courses } = useDataStore();
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
     const toggleSelectAll = () => {

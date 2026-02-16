@@ -9,6 +9,7 @@ import { AddUserModal } from '../../components/team/AddUserModal';
 import { ImportUsersModal } from '../../components/team/ImportUsersModal';
 import { UserProfile } from '../../components/team/UserProfile';
 import { RolesManagement } from '../../components/team/RolesManagement';
+import { useDataStore } from '../../store/useDataStore';
 
 export function UserManagement() {
     const { t } = useTranslation();
@@ -16,6 +17,24 @@ export function UserManagement() {
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+    const { users } = useDataStore();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedTenant, setSelectedTenant] = useState('all');
+    const [selectedRole, setSelectedRole] = useState('all');
+    const [selectedStatus, setSelectedStatus] = useState('all');
+
+    // Filter logic
+    const filteredUsers = users.filter(user => {
+        const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesTenant = selectedTenant === 'all' || user.tenantId === selectedTenant;
+        const matchesRole = selectedRole === 'all' || user.role === selectedRole;
+        const matchesStatus = selectedStatus === 'all' ||
+            (selectedStatus === 'active' ? user.isActive : !user.isActive);
+
+        return matchesSearch && matchesTenant && matchesRole && matchesStatus;
+    });
 
     const handleUserClick = (userId: string) => {
         setSelectedUserId(userId);
@@ -65,8 +84,17 @@ export function UserManagement() {
             {view === 'list' && (
                 <>
                     <UserStats />
-                    <UserFilters />
-                    <UserList onUserClick={handleUserClick} />
+                    <UserFilters
+                        searchQuery={searchQuery}
+                        onSearchChange={setSearchQuery}
+                        selectedTenant={selectedTenant}
+                        onTenantChange={setSelectedTenant}
+                        selectedRole={selectedRole}
+                        onRoleChange={setSelectedRole}
+                        selectedStatus={selectedStatus}
+                        onStatusChange={setSelectedStatus}
+                    />
+                    <UserList users={filteredUsers} onUserClick={handleUserClick} />
                 </>
             )}
 
