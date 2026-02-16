@@ -5,20 +5,26 @@ import { Button } from '../../components/ui/Button';
 import { UserStats } from '../../components/team/UserStats';
 import { UserFilters } from '../../components/team/UserFilters';
 import { UserList } from '../../components/team/UserList';
-import { AddUserModal } from '../../components/team/AddUserModal';
+import { UserModal } from '../../components/team/UserModal';
 import { ImportUsersModal } from '../../components/team/ImportUsersModal';
 import { UserProfile } from '../../components/team/UserProfile';
 import { RolesManagement } from '../../components/team/RolesManagement';
 import { useDataStore } from '../../store/useDataStore';
+import { User } from '../../types';
 
 export function UserManagement() {
     const { t } = useTranslation();
     const [view, setView] = useState<'list' | 'profile' | 'roles'>('list');
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+    // Modal states
+    const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+    const [selectedUserForEdit, setSelectedUserForEdit] = useState<User | null>(null);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
-    const { users } = useDataStore();
+    const { users, deleteUser } = useDataStore();
+
+    // Filter states
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTenant, setSelectedTenant] = useState('all');
     const [selectedRole, setSelectedRole] = useState('all');
@@ -46,6 +52,24 @@ export function UserManagement() {
         setView('list');
     };
 
+    const handleAddUser = () => {
+        setSelectedUserForEdit(null);
+        setIsUserModalOpen(true);
+    };
+
+    const handleEditUser = (user: User) => {
+        setSelectedUserForEdit(user);
+        setIsUserModalOpen(true);
+    };
+
+    const handleDeleteUser = async (userId: string) => {
+        try {
+            await deleteUser(userId);
+        } catch (error) {
+            alert('Erro ao apagar utilizador. Por favor tente novamente.');
+        }
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -65,7 +89,7 @@ export function UserManagement() {
                                 <Upload className="w-4 h-4 mr-2" />
                                 {t('team.actions.importCsv')}
                             </Button>
-                            <Button onClick={() => setIsAddModalOpen(true)}>
+                            <Button onClick={handleAddUser}>
                                 <UserPlus className="w-4 h-4 mr-2" />
                                 {t('team.actions.addUser')}
                             </Button>
@@ -94,7 +118,12 @@ export function UserManagement() {
                         selectedStatus={selectedStatus}
                         onStatusChange={setSelectedStatus}
                     />
-                    <UserList users={filteredUsers} onUserClick={handleUserClick} />
+                    <UserList
+                        users={filteredUsers}
+                        onUserClick={handleUserClick}
+                        onEdit={handleEditUser}
+                        onDelete={handleDeleteUser}
+                    />
                 </>
             )}
 
@@ -107,8 +136,16 @@ export function UserManagement() {
             )}
 
             {/* Modals */}
-            <AddUserModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
-            <ImportUsersModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
+            <UserModal
+                isOpen={isUserModalOpen}
+                onClose={() => setIsUserModalOpen(false)}
+                user={selectedUserForEdit}
+            />
+
+            <ImportUsersModal
+                isOpen={isImportModalOpen}
+                onClose={() => setIsImportModalOpen(false)}
+            />
         </div>
     );
 }

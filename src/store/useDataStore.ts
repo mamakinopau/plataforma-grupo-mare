@@ -22,6 +22,7 @@ interface DataState {
     deleteCategory: (id: string) => Promise<void>;
     addUser: (user: User) => Promise<void>; // In real app, this might trigger an invite
     updateUser: (id: string, user: Partial<User>) => Promise<void>;
+    deleteUser: (id: string) => Promise<void>;
     addTenant: (tenant: Omit<Tenant, 'id' | 'createdAt'>) => Promise<void>;
     updateTenant: (id: string, updates: Partial<Tenant>) => Promise<void>;
     deleteTenant: (id: string) => Promise<void>;
@@ -56,7 +57,14 @@ export const useDataStore = create<DataState>((set, get) => ({
                 courses: courses || [],
                 tenants: tenants || [],
                 categories: categories || [],
-                users: (profiles as any[])?.map(p => ({ ...p, role: p.role as any })) || [],
+                users: (profiles as any[])?.map(p => ({
+                    ...p,
+                    role: p.role as any,
+                    tenantId: p.tenant_id,
+                    isActive: p.is_active,
+                    joinedAt: p.created_at,
+                    lastLoginAt: p.last_sign_in_at // If using auth.users join, otherwise undefined is fine for now
+                })) || [],
                 progress: progress || [],
                 isLoading: false
             });
@@ -207,15 +215,45 @@ export const useDataStore = create<DataState>((set, get) => ({
     },
 
     updateUser: async (id, updates) => {
+        // Map camelCase to snake_case for DB
+        const dbUpdates: any = {};
+        if (updates.name) dbUpdates.name = updates.name;
+        if (updates.role) dbUpdates.role = updates.role;
+        if (updates.tenantId) dbUpdates.tenant_id = updates.tenantId;
+        if (updates.position) dbUpdates.position = updates.position;
+        if (updates.isActive !== undefined) dbUpdates.is_active = updates.isActive;
+
         const { error } = await supabase
             .from('profiles')
-            .update(updates)
+            .update(dbUpdates)
             .eq('id', id);
 
         if (!error) {
             set(state => ({
                 users: state.users.map(u => u.id === id ? { ...u, ...updates } : u)
             }));
+        }
+    },
+
+    deleteUser: async (id) => {
+        try {
+            const response = await fetch('/api/delete-user', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: id }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to delete user');
+            }
+
+            set(state => ({
+                users: state.users.filter(u => u.id !== id)
+            }));
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw error;
         }
     },
 

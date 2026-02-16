@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Modal } from '../ui/Modal';
 import { useDataStore } from '../../store/useDataStore';
-import { UserRole } from '../../types';
+import { User, UserRole } from '../../types';
 
-interface AddUserModalProps {
+interface UserModalProps {
     isOpen: boolean;
     onClose: () => void;
+    user?: User | null;
 }
 
-export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
+export function UserModal({ isOpen, onClose, user }: UserModalProps) {
     const { t } = useTranslation();
-    const { tenants, addUser } = useDataStore();
+    const { tenants, addUser, updateUser } = useDataStore();
 
     // Form state
     const [firstName, setFirstName] = useState('');
@@ -25,6 +26,27 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
     const [position, setPosition] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
+
+    // Populate form when user prop changes
+    useEffect(() => {
+        if (user) {
+            const [first, ...last] = user.name.split(' ');
+            setFirstName(first);
+            setLastName(last.join(' '));
+            setEmail(user.email);
+            setRole(user.role as UserRole);
+            setTenantId(user.tenantId || '');
+            setPosition(user.position || '');
+        } else {
+            // Reset for add mode
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setRole('employee');
+            setTenantId('');
+            setPosition('');
+        }
+    }, [user, isOpen]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,35 +59,39 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
         setIsLoading(true);
 
         try {
-            await addUser({
-                // ID will be assigned by the server
-                id: '',
-                name: `${firstName} ${lastName}`,
-                email,
-                role,
-                tenantId,
-                position,
-                isActive: true,
-                joinedAt: new Date().toISOString().split('T')[0],
-                onboardingCompleted: false,
-                preferences: {
-                    emailNotifications: true,
-                    pushNotifications: false,
-                    marketingEmails: false
-                }
-            });
-
-            alert('Usuário criado com sucesso! A password temporária é: TempPassword123!');
+            if (user) {
+                // Update existing user
+                await updateUser(user.id, {
+                    name: `${firstName} ${lastName}`,
+                    email, // Note: changing email usually requires auth verification, but we'll try updating profile
+                    role,
+                    tenantId,
+                    position
+                });
+                alert('Utilizador atualizado com sucesso!');
+            } else {
+                // Add new user
+                await addUser({
+                    id: '', // Server assigned
+                    name: `${firstName} ${lastName}`,
+                    email,
+                    role,
+                    tenantId,
+                    position,
+                    isActive: true,
+                    joinedAt: new Date().toISOString().split('T')[0],
+                    onboardingCompleted: false,
+                    preferences: {
+                        emailNotifications: true,
+                        pushNotifications: false,
+                        marketingEmails: false
+                    }
+                });
+                alert('Utilizador criado com sucesso! A password temporária é: TempPassword123!');
+            }
             onClose();
-
-            // Reset form
-            setFirstName('');
-            setLastName('');
-            setEmail('');
-            setTenantId('');
-            setPosition('');
         } catch (error) {
-            alert(`Erro ao criar utilizador: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+            alert(`Erro ao ${user ? 'atualizar' : 'criar'} utilizador: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
         } finally {
             setIsLoading(false);
         }
@@ -85,8 +111,11 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
         { value: 'admin', label: 'Administrador' }
     ];
 
+    const title = user ? t('team.actions.editUser', 'Editar Utilizador') : t('team.actions.addUser');
+    const submitText = isLoading ? 'A processar...' : (user ? 'Guardar Alterações' : 'Criar Utilizador');
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={t('team.actions.addUser')}>
+        <Modal isOpen={isOpen} onClose={onClose} title={title}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <Input
@@ -112,7 +141,9 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    disabled={!!user} // Disable email edit for now to avoid auth complexity
                 />
+                {user && <p className="text-xs text-gray-400 -mt-3">O email não pode ser alterado aqui.</p>}
 
                 <div className="grid grid-cols-2 gap-4">
                     <Select
@@ -136,20 +167,22 @@ export function AddUserModal({ isOpen, onClose }: AddUserModalProps) {
                     onChange={(e) => setPosition(e.target.value)}
                 />
 
-                <div className="space-y-3 pt-2">
-                    <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                        <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" defaultChecked />
-                        Enviar email de boas-vindas
-                    </label>
-                    <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                        <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" defaultChecked />
-                        Atribuir formação obrigatória automaticamente
-                    </label>
-                </div>
+                {!user && (
+                    <div className="space-y-3 pt-2">
+                        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                            <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" defaultChecked />
+                            Enviar email de boas-vindas
+                        </label>
+                        <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                            <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" defaultChecked />
+                            Atribuir formação obrigatória automaticamente
+                        </label>
+                    </div>
+                )}
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
                     <Button type="button" variant="ghost" onClick={onClose} disabled={isLoading}>Cancelar</Button>
-                    <Button type="submit" disabled={isLoading}>{isLoading ? 'A criar...' : 'Criar Usuário'}</Button>
+                    <Button type="submit" disabled={isLoading}>{submitText}</Button>
                 </div>
             </form>
         </Modal>

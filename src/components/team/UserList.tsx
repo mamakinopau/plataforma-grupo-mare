@@ -3,15 +3,16 @@ import { MoreVertical, Mail, Ban, Trash2, Edit, Award, CheckCircle, XCircle, Clo
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { useDataStore } from '../../store/useDataStore';
-
 import { User } from '../../types';
 
 interface UserListProps {
     users: User[];
     onUserClick: (userId: string) => void;
+    onEdit: (user: User) => void;
+    onDelete: (userId: string) => void;
 }
 
-export function UserList({ users, onUserClick }: UserListProps) {
+export function UserList({ users, onUserClick, onEdit, onDelete }: UserListProps) {
     const { tenants, progress, courses } = useDataStore();
     const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -29,6 +30,18 @@ export function UserList({ users, onUserClick }: UserListProps) {
         } else {
             setSelectedUsers([...selectedUsers, id]);
         }
+    };
+
+    const handleDeleteClick = (e: React.MouseEvent, userId: string) => {
+        e.stopPropagation(); // Prevent row click
+        if (window.confirm('Tem a certeza que deseja apagar este utilizador?')) {
+            onDelete(userId);
+        }
+    };
+
+    const handleEditClick = (e: React.MouseEvent, user: User) => {
+        e.stopPropagation(); // Prevent row click
+        onEdit(user);
     };
 
     const getRoleBadgeColor = (role: string) => {
@@ -159,10 +172,18 @@ export function UserList({ users, onUserClick }: UserListProps) {
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button className="p-1 text-gray-400 hover:text-primary-600 transition-colors" title="Edit">
+                                            <button
+                                                className="p-1 text-gray-400 hover:text-primary-600 transition-colors"
+                                                title="Edit"
+                                                onClick={(e) => handleEditClick(e, user)}
+                                            >
                                                 <Edit className="w-4 h-4" />
                                             </button>
-                                            <button className="p-1 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                                            <button
+                                                className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                                                title="Delete"
+                                                onClick={(e) => handleDeleteClick(e, user.id)}
+                                            >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
                                             <button className="p-1 text-gray-400 hover:text-gray-600 transition-colors">
