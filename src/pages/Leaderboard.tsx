@@ -119,8 +119,19 @@ export function Leaderboard() {
                                     <span>•</span>
                                     <div className="flex items-center gap-1">
                                         {(() => {
+                                            if (!user.tenantId) {
+                                                return (
+                                                    <>
+                                                        <div className="w-4 h-4 rounded-full bg-purple-100 flex items-center justify-center border border-purple-200">
+                                                            <span className="text-[8px] font-bold text-purple-700">GM</span>
+                                                        </div>
+                                                        <span className="text-xs text-gray-600">Grupo Mare</span>
+                                                    </>
+                                                );
+                                            }
+
                                             const tenant = tenants.find(t => t.id === user.tenantId);
-                                            if (!tenant) return <span>Restaurante</span>;
+                                            if (!tenant) return <span className="text-xs text-gray-400">Restaurante</span>;
 
                                             return (
                                                 <>
@@ -128,14 +139,14 @@ export function Leaderboard() {
                                                         <img
                                                             src={tenant.logoUrl}
                                                             alt={tenant.name}
-                                                            className="w-4 h-4 rounded-full object-cover"
+                                                            className="w-4 h-4 rounded-full object-cover border border-gray-100"
                                                         />
                                                     ) : (
                                                         <span className="w-4 h-4 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold">
                                                             {tenant.name.substring(0, 1)}
                                                         </span>
                                                     )}
-                                                    <span>{tenant.name}</span>
+                                                    <span className="text-xs">{tenant.name}</span>
                                                 </>
                                             );
                                         })()}
@@ -171,8 +182,19 @@ export function Leaderboard() {
                                                 <span>•</span>
                                                 <div className="flex items-center gap-1">
                                                     {(() => {
+                                                        if (!user.tenantId) {
+                                                            return (
+                                                                <>
+                                                                    <div className="w-3 h-3 rounded-full bg-purple-100 flex items-center justify-center border border-purple-200">
+                                                                        <span className="text-[6px] font-bold text-purple-700">GM</span>
+                                                                    </div>
+                                                                    <span className="text-xs text-gray-600">Grupo Mare</span>
+                                                                </>
+                                                            );
+                                                        }
+
                                                         const tenant = tenants.find(t => t.id === user.tenantId);
-                                                        if (!tenant) return <span>Restaurante</span>;
+                                                        if (!tenant) return <span className="text-xs text-gray-400">Restaurante</span>;
 
                                                         return (
                                                             <>
@@ -180,14 +202,14 @@ export function Leaderboard() {
                                                                     <img
                                                                         src={tenant.logoUrl}
                                                                         alt={tenant.name}
-                                                                        className="w-3 h-3 rounded-full object-cover"
+                                                                        className="w-3 h-3 rounded-full object-cover border border-gray-100"
                                                                     />
                                                                 ) : (
                                                                     <span className="w-3 h-3 rounded-full bg-gray-200 flex items-center justify-center text-[6px] font-bold">
                                                                         {tenant.name.substring(0, 1)}
                                                                     </span>
                                                                 )}
-                                                                <span>{tenant.name}</span>
+                                                                <span className="text-xs">{tenant.name}</span>
                                                             </>
                                                         );
                                                     })()}

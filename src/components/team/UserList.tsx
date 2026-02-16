@@ -150,8 +150,19 @@ export function UserList({ users, onUserClick, onEdit, onDelete }: UserListProps
                                     <td className="px-6 py-4 text-gray-600">
                                         <div className="flex items-center gap-2">
                                             {(() => {
+                                                if (!user.tenantId) {
+                                                    return (
+                                                        <>
+                                                            <div className="w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center border border-purple-200">
+                                                                <span className="text-[10px] font-bold text-purple-700">GM</span>
+                                                            </div>
+                                                            <span className="text-gray-600 font-medium">Grupo Mare</span>
+                                                        </>
+                                                    );
+                                                }
+
                                                 const tenant = tenants.find(t => t.id === user.tenantId);
-                                                if (!tenant) return <span>Restaurante</span>;
+                                                if (!tenant) return <span className="text-gray-400 italic">Sem Restaurante</span>;
 
                                                 return (
                                                     <>
@@ -159,7 +170,11 @@ export function UserList({ users, onUserClick, onEdit, onDelete }: UserListProps
                                                             <img
                                                                 src={tenant.logoUrl}
                                                                 alt={tenant.name}
-                                                                className="w-5 h-5 rounded-full object-cover"
+                                                                className="w-5 h-5 rounded-full object-cover border border-gray-200"
+                                                                onError={(e) => {
+                                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                                                                }}
                                                             />
                                                         ) : (
                                                             <span className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center text-[8px] font-bold">
