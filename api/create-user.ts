@@ -67,8 +67,9 @@ export default async function handler(req: any, res: any) {
                 tenant_id: tenantId,
                 position: position || '',
                 is_active: true,
-                // Add other fields from userData if present
-                ...userData
+                // Explicitly map known fields only
+                onboarding_completed: userData?.onboarding_completed || false,
+                // joined_at is not in the schema, we rely on created_at
             });
 
         if (profileError) {
