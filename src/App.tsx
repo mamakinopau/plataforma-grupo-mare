@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useEffect } from 'react';
 import { useAuthStore } from './store/useAuthStore';
 import { useDataStore } from './store/useDataStore';
+import { useNotificationStore } from './store/useNotificationStore';
 
 import { Layout } from './components/layout/Layout';
 import { Login } from './pages/Login';
@@ -19,19 +20,19 @@ import { Settings } from './pages/Settings';
 import { Reports } from './pages/Reports';
 import { BrandingProvider } from './components/layout/BrandingProvider';
 
-
-
 import { UserRole } from './types';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const initializeData = useDataStore((state) => state.initialize);
+    const initializeNotifications = useNotificationStore((state) => state.initialize);
 
     useEffect(() => {
         if (isAuthenticated) {
             initializeData();
+            initializeNotifications();
         }
-    }, [isAuthenticated, initializeData]);
+    }, [isAuthenticated, initializeData, initializeNotifications]);
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
@@ -86,8 +87,6 @@ function App() {
                     <Route path="reports" element={<Reports />} />
                     <Route path="settings" element={<Settings />} />
                     <Route path="help" element={<Help />} />
-
-
 
                     {/* Admin Routes */}
                     <Route path="admin/users" element={

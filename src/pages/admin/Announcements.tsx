@@ -18,22 +18,43 @@ export function Announcements() {
         isActive: true,
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (newAnnouncement.title && newAnnouncement.content) {
-            addAnnouncement({
-                title: newAnnouncement.title,
-                content: newAnnouncement.content,
-                priority: newAnnouncement.priority as 'low' | 'medium' | 'high',
-                isActive: newAnnouncement.isActive || true,
-            });
-            setIsCreating(false);
-            setNewAnnouncement({
-                title: '',
-                content: '',
-                priority: 'medium',
-                isActive: true,
-            });
+            try {
+                await addAnnouncement({
+                    title: newAnnouncement.title,
+                    content: newAnnouncement.content,
+                    priority: newAnnouncement.priority as 'low' | 'medium' | 'high',
+                    isActive: newAnnouncement.isActive || true,
+                });
+                setIsCreating(false);
+                setNewAnnouncement({
+                    title: '',
+                    content: '',
+                    priority: 'medium',
+                    isActive: true,
+                });
+            } catch (error) {
+                alert(t('announcements.error.create'));
+            }
+        }
+    };
+
+    const handleToggle = async (id: string) => {
+        try {
+            await toggleAnnouncement(id);
+        } catch (error) {
+            console.error('Failed to toggle announcement', error);
+        }
+    };
+
+    const handleRemove = async (id: string) => {
+        if (!window.confirm(t('announcements.confirmDelete'))) return;
+        try {
+            await removeAnnouncement(id);
+        } catch (error) {
+            console.error('Failed to remove announcement', error);
         }
     };
 
@@ -141,7 +162,7 @@ export function Announcements() {
                             </div>
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => toggleAnnouncement(announcement.id)}
+                                    onClick={() => handleToggle(announcement.id)}
                                     className={`p-2 rounded-full transition-colors ${announcement.isActive
                                         ? 'text-green-600 hover:bg-green-50'
                                         : 'text-gray-400 hover:bg-gray-100'
@@ -151,7 +172,7 @@ export function Announcements() {
                                     {announcement.isActive ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
                                 </button>
                                 <button
-                                    onClick={() => removeAnnouncement(announcement.id)}
+                                    onClick={() => handleRemove(announcement.id)}
                                     className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
                                     title="Delete"
                                 >
