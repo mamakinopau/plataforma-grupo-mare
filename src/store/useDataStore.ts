@@ -53,26 +53,30 @@ export const useDataStore = create<DataState>((set, get) => ({
                 supabase.from('user_progress').select('*')
             ]);
 
+            const mappedTenants = (tenants as any[])?.map(t => ({
+                id: t.id,
+                name: t.name,
+                slug: t.slug,
+                domain: t.domain,
+                logoUrl: t.logo_url,
+                theme: t.theme,
+                maxSeats: t.max_seats,
+                subscriptionStatus: t.subscription_status,
+                createdAt: t.created_at
+            })) || [];
+
+            console.log('[DataStore] Loaded tenants:', mappedTenants);
+
             set({
                 courses: courses || [],
-                tenants: (tenants as any[])?.map(t => ({
-                    id: t.id,
-                    name: t.name,
-                    slug: t.slug,
-                    domain: t.domain,
-                    logoUrl: t.logo_url,
-                    theme: t.theme,
-                    maxSeats: t.max_seats,
-                    subscriptionStatus: t.subscription_status,
-                    createdAt: t.created_at
-                })) || [],
+                tenants: mappedTenants,
                 users: (profiles as any[])?.map(p => ({
                     ...p,
                     role: p.role as any,
                     tenantId: p.tenant_id,
                     isActive: p.is_active,
                     joinedAt: p.created_at,
-                    lastLoginAt: p.last_sign_in_at // If using auth.users join, otherwise undefined is fine for now
+                    lastLoginAt: p.last_sign_in_at
                 })) || [],
                 progress: progress || [],
                 isLoading: false
