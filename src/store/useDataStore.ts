@@ -310,15 +310,25 @@ export const useDataStore = create<DataState>((set, get) => ({
         if (updates.maxSeats) dbUpdates.max_seats = updates.maxSeats;
         if (updates.subscriptionStatus) dbUpdates.subscription_status = updates.subscriptionStatus;
 
-        const { error } = await supabase
+        console.log('[DataStore] Updating tenant:', id, dbUpdates);
+
+        const { data, error } = await supabase
             .from('tenants')
             .update(dbUpdates)
-            .eq('id', id);
+            .eq('id', id)
+            .select();
 
         if (error) {
             console.error('Error updating tenant:', error);
             throw error;
         }
+
+        if (!data || data.length === 0) {
+            console.warn('[DataStore] No tenant updated. ID mismatch or RLS policy?');
+            throw new Error('Nenhum registo atualizado. Verifique permissões.');
+        }
+
+        console.log('[DataStore] Tenant updated successfully', data);
 
         set(state => ({
             tenants: state.tenants.map(t => t.id === id ? { ...t, ...updates } : t)
