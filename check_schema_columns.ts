@@ -11,10 +11,9 @@ const supabase = createClient(supabaseUrl!, supabaseKey!);
 async function checkColumns() {
     console.log('Checking columns...');
 
-    // Try to select 'category_id' column from courses
-    // We want to know the TYPE. We can infer it by trying to filter with a string.
-    const { error: typeError } = await supabase.from('courses').select('id').eq('category_id', 'test-string').limit(1);
-    console.log("Can compare category_id with string?", !typeError ? "YES" : "NO (" + typeError.message + ")");
+    // Try to select 'updated_at' column from courses
+    const { error: colError } = await supabase.from('courses').select('updated_at').limit(1);
+    console.log("Has 'updated_at' column?", !colError ? "YES" : "NO (" + colError.message + ")");
 }
 
 checkColumns();

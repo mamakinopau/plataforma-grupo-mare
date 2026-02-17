@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ArrowLeft, Mail, Phone, MapPin, Calendar, Award, BookOpen, Clock, MoreHorizontal } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
+import { useDataStore } from '../../store/useDataStore';
+import { getAvatarUrl } from '../../lib/utils';
 
 interface UserProfileProps {
     userId: string;
@@ -10,24 +12,36 @@ interface UserProfileProps {
 
 export function UserProfile({ userId, onBack }: UserProfileProps) {
     const [activeTab, setActiveTab] = useState<'training' | 'certificates' | 'activity' | 'notes'>('training');
+    const { users, tenants, courses, progress } = useDataStore();
 
-    // Mock user data
-    const user = {
-        name: 'Ana Silva',
-        email: 'ana.silva@grupomare.pt',
-        role: 'Manager',
-        restaurant: 'Mare Lisboa',
-        phone: '+351 912 345 678',
-        joinedDate: 'Jan 15, 2024',
-        lastActive: '2 hours ago',
-        avatarUrl: 'https://ui-avatars.com/api/?name=Ana+Silva&background=0D8ABC&color=fff',
-        stats: {
-            completedCourses: 8,
-            inProgress: 2,
-            totalHours: 24,
-            avgScore: 92
-        }
-    };
+    const user = users.find(u => u.id === userId);
+    const tenant = tenants.find(t => t.id === user?.tenantId);
+
+    const userStats = useMemo(() => {
+        if (!user) return { completed: 0, inProgress: 0, totalHours: 0, avgScore: 0 };
+
+        const userProgress = progress.filter(p => p.userId === userId);
+        const completed = userProgress.filter(p => p.status === 'completed').length;
+        const inProgress = userProgress.filter(p => p.status === 'in_progress').length;
+
+        // Calculate total hours based on completed/in-progress courses duration
+        // This is an approximation. Ideally we'd track actual time spent.
+        const totalMinutes = userProgress.reduce((acc, p) => {
+            const course = courses.find(c => c.id === p.courseId);
+            return acc + (course?.durationMinutes || 0) * (p.progressPercentage / 100);
+        }, 0);
+
+        return {
+            completed,
+            inProgress,
+            totalHours: Math.round(totalMinutes / 60),
+            avgScore: 0 // We don't track scores yet
+        };
+    }, [user, progress, courses, userId]);
+
+    if (!user) {
+        return <div>User not found</div>;
+    }
 
     return (
         <div className="space-y-6">
@@ -41,15 +55,15 @@ export function UserProfile({ userId, onBack }: UserProfileProps) {
                 <div className="space-y-6">
                     <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 text-center">
                         <img
-                            src={user.avatarUrl}
+                            src={getAvatarUrl(user.avatarUrl, user.name)}
                             alt={user.name}
-                            className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-gray-50"
+                            className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-gray-50 object-cover"
                         />
                         <h2 className="text-xl font-bold text-gray-900">{user.name}</h2>
-                        <p className="text-sm text-gray-500 mb-4">{user.role}</p>
+                        <p className="text-sm text-gray-500 mb-4 capitalize">{user.role}</p>
 
                         <div className="flex justify-center gap-2 mb-6">
-                            <Button size="sm" variant="outline">
+                            <Button size="sm" variant="outline" onClick={() => window.open(`mailto:${user.email}`)}>
                                 <Mail className="w-4 h-4 mr-2" />
                                 Message
                             </Button>
@@ -65,15 +79,15 @@ export function UserProfile({ userId, onBack }: UserProfileProps) {
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                                 <Phone className="w-4 h-4 mr-3 text-gray-400" />
-                                {user.phone}
+                                {user.phone || 'No phone'}
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                                 <MapPin className="w-4 h-4 mr-3 text-gray-400" />
-                                {user.restaurant}
+                                {tenant?.name || 'No Restaurant'}
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                                 <Calendar className="w-4 h-4 mr-3 text-gray-400" />
-                                Joined {user.joinedDate}
+                                Joined {new Date(user.joinedAt).toLocaleDateString()}
                             </div>
                         </div>
                     </div>
@@ -82,19 +96,19 @@ export function UserProfile({ userId, onBack }: UserProfileProps) {
                         <h3 className="font-semibold text-gray-900 mb-4">Quick Stats</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="p-3 bg-gray-50 rounded-lg text-center">
-                                <p className="text-2xl font-bold text-primary-600">{user.stats.completedCourses}</p>
+                                <p className="text-2xl font-bold text-primary-600">{userStats.completed}</p>
                                 <p className="text-xs text-gray-500">Completed</p>
                             </div>
                             <div className="p-3 bg-gray-50 rounded-lg text-center">
-                                <p className="text-2xl font-bold text-amber-600">{user.stats.inProgress}</p>
+                                <p className="text-2xl font-bold text-amber-600">{userStats.inProgress}</p>
                                 <p className="text-xs text-gray-500">In Progress</p>
                             </div>
                             <div className="p-3 bg-gray-50 rounded-lg text-center">
-                                <p className="text-2xl font-bold text-green-600">{user.stats.avgScore}%</p>
+                                <p className="text-2xl font-bold text-green-600">{userStats.avgScore}%</p>
                                 <p className="text-xs text-gray-500">Avg. Score</p>
                             </div>
                             <div className="p-3 bg-gray-50 rounded-lg text-center">
-                                <p className="text-2xl font-bold text-blue-600">{user.stats.totalHours}h</p>
+                                <p className="text-2xl font-bold text-blue-600">{userStats.totalHours}h</p>
                                 <p className="text-xs text-gray-500">Learning</p>
                             </div>
                         </div>
@@ -132,39 +146,62 @@ export function UserProfile({ userId, onBack }: UserProfileProps) {
                                         <Button size="sm">Assign New Course</Button>
                                     </div>
                                     <div className="space-y-4">
-                                        {[1, 2, 3].map((i) => (
-                                            <div key={i} className="flex items-start gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
-                                                <div className="p-2 bg-primary-50 rounded-lg">
-                                                    <BookOpen className="w-6 h-6 text-primary-600" />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between mb-1">
-                                                        <h4 className="font-medium text-gray-900">Advanced Wine Pairing</h4>
-                                                        <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">In Progress</span>
+                                        {courses.filter(c => !c.tenantIds || c.tenantIds.length === 0 || (user?.tenantId && c.tenantIds.includes(user.tenantId))).map((course) => {
+                                            const userProg = progress.find(p => p.userId === userId && p.courseId === course.id);
+                                            const status = userProg?.status || 'not_started';
+                                            const pct = userProg?.progressPercentage || 0;
+
+                                            return (
+                                                <div key={course.id} className="flex items-start gap-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors">
+                                                    <div className="p-2 bg-primary-50 rounded-lg">
+                                                        <BookOpen className="w-6 h-6 text-primary-600" />
                                                     </div>
-                                                    <p className="text-sm text-gray-500 mb-3">Due in 5 days</p>
-                                                    <div className="w-full bg-gray-200 rounded-full h-2">
-                                                        <div className="bg-amber-500 h-2 rounded-full" style={{ width: '45%' }}></div>
+                                                    <div className="flex-1">
+                                                        <div className="flex justify-between mb-1">
+                                                            <h4 className="font-medium text-gray-900">{course.title}</h4>
+                                                            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${status === 'completed' ? 'text-green-600 bg-green-50' :
+                                                                    status === 'in_progress' ? 'text-amber-600 bg-amber-50' :
+                                                                        'text-gray-600 bg-gray-100'
+                                                                }`}>
+                                                                {status === 'completed' ? 'Completed' : status === 'in_progress' ? 'In Progress' : 'Not Started'}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-sm text-gray-500 mb-3">{course.durationMinutes} min • {course.category}</p>
+                                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                                            <div
+                                                                className={`h-2 rounded-full ${status === 'completed' ? 'bg-green-500' : 'bg-primary-500'}`}
+                                                                style={{ width: `${pct}%` }}
+                                                            ></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
+                                        {courses.length === 0 && <p className="text-gray-500 text-center py-4">No courses available.</p>}
                                     </div>
                                 </div>
                             )}
 
                             {activeTab === 'certificates' && (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {[1, 2].map((i) => (
-                                        <div key={i} className="border border-gray-200 rounded-lg p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                                            <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-3">
-                                                <Award className="w-6 h-6 text-green-600" />
+                                    {progress.filter(p => p.userId === userId && p.status === 'completed').map((p) => {
+                                        const course = courses.find(c => c.id === p.courseId);
+                                        if (!course) return null;
+
+                                        return (
+                                            <div key={p.courseId} className="border border-gray-200 rounded-lg p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                                                <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-3">
+                                                    <Award className="w-6 h-6 text-green-600" />
+                                                </div>
+                                                <h4 className="font-medium text-gray-900">{course.title}</h4>
+                                                <p className="text-xs text-gray-500 mt-1">Issued on {new Date().toLocaleDateString()}</p>
+                                                <Button variant="outline" size="sm" className="mt-4 w-full">Download PDF</Button>
                                             </div>
-                                            <h4 className="font-medium text-gray-900">Food Safety Level 1</h4>
-                                            <p className="text-xs text-gray-500 mt-1">Issued on Jan 20, 2024</p>
-                                            <Button variant="outline" size="sm" className="mt-4 w-full">Download PDF</Button>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
+                                    {progress.filter(p => p.userId === userId && p.status === 'completed').length === 0 && (
+                                        <p className="col-span-full text-center text-gray-500 py-4">No certificates earned yet.</p>
+                                    )}
                                 </div>
                             )}
 
