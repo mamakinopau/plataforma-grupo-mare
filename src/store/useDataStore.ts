@@ -18,6 +18,7 @@ interface DataState {
     updateProgress: (userId: string, courseId: string, progress: Partial<UserProgress>) => Promise<void>;
     addCourse: (course: Omit<Course, 'id' | 'createdAt'>) => Promise<void>;
     updateCourse: (id: string, course: Partial<Course>) => Promise<void>;
+    deleteCourse: (id: string) => Promise<void>;
     addCategory: (category: Category) => Promise<void>;
     deleteCategory: (id: string) => Promise<void>;
     addUser: (user: User) => Promise<void>; // In real app, this might trigger an invite
@@ -225,6 +226,22 @@ export const useDataStore = create<DataState>((set, get) => ({
 
         set(state => ({
             courses: state.courses.map(c => c.id === id ? { ...c, ...updates } : c)
+        }));
+    },
+
+    deleteCourse: async (id) => {
+        const { error } = await supabase
+            .from('courses')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error deleting course:', error);
+            throw error;
+        }
+
+        set(state => ({
+            courses: state.courses.filter(c => c.id !== id)
         }));
     },
 

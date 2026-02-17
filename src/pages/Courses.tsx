@@ -3,7 +3,7 @@ import { useDataStore } from '../store/useDataStore';
 import { Card, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Clock, PlayCircle, Plus, Edit } from 'lucide-react';
+import { Clock, PlayCircle, Plus, Edit, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { useTranslation } from 'react-i18next';
@@ -88,12 +88,27 @@ export function Courses() {
                                             {t('courses.startCourse')}
                                         </Button>
                                     </Link>
-                                    {user && (user.role === 'admin' || user.role === 'manager') && (
-                                        <Link to={`/admin/courses/${course.id}/edit`}>
-                                            <Button variant="outline" size="sm" className="w-8 px-0">
-                                                <Edit className="w-4 h-4" />
+                                    {user && (user.role === 'admin' || user.role === 'manager' || user.role === 'super_admin') && (
+                                        <>
+                                            <Link to={`/admin/courses/${course.id}/edit`}>
+                                                <Button variant="outline" size="sm" className="w-8 px-0">
+                                                    <Edit className="w-4 h-4" />
+                                                </Button>
+                                            </Link>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="w-8 px-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                onClick={() => {
+                                                    if (window.confirm(t('courses.confirmDelete') || 'Tem a certeza que deseja eliminar este curso?')) {
+                                                        const { deleteCourse } = useDataStore.getState();
+                                                        deleteCourse(course.id);
+                                                    }
+                                                }}
+                                            >
+                                                <Trash2 className="w-4 h-4" />
                                             </Button>
-                                        </Link>
+                                        </>
                                     )}
 
                                 </div>

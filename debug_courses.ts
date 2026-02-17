@@ -17,9 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function testCourses() {
     console.log('--- Testing Courses ---');
 
-    const email = 'pedron252@gmail.com'; // Use a known admin email if possible, or just check public access
-
-    // 1. Try to fetch courses (Read access)
+    // 1. Fetching existing courses
     console.log('\n1. Fetching existing courses...');
     const { data: courses, error: readError } = await supabase
         .from('courses')
@@ -30,18 +28,16 @@ async function testCourses() {
         console.error('Error fetching courses:', readError);
     } else {
         console.log(`Found ${courses.length} courses.`);
-        if (courses.length > 0) {
-            console.log('Sample course keys:', Object.keys(courses[0]));
-        }
     }
 
-    /*
     // 2. Try to insert a dummy course (Write access) using snake_case
     console.log('\n2. Attempting to insert a dummy course (snake_case)...');
+
+    // Using a known valid category ID 'food_safety' to test FK constraint
     const dummyCourse = {
         title: 'Debug Course ' + new Date().toISOString(),
         description: 'Created by debug script',
-        category: 'general', // valid category?
+        category_id: 'food_safety',
         duration_minutes: 60,
         is_mandatory: false,
         target_roles: ['employee'],
@@ -50,27 +46,25 @@ async function testCourses() {
         thumbnail_url: 'https://via.placeholder.com/150'
     };
 
-    // We need to be signed in as admin to likely succeed. 
-    // This script runs as ANON which might fail if RLS is strict.
-    // Ideally we should use SERVICE_ROLE key for setup, but we want to test USER access.
-    // For now, let's see if we get RLS error or Schema error.
-
     const { data: newCourse, error: insertError } = await supabase
         .from('courses')
         .insert(dummyCourse)
         .select()
         .single();
 
+    const fs = await import('fs');
+
     if (insertError) {
         console.error('Insert failed:', insertError);
+        fs.writeFileSync('debug_result.txt', 'Insert failed: ' + JSON.stringify(insertError, null, 2));
     } else {
         console.log('Insert success:', newCourse);
+        fs.writeFileSync('debug_result.txt', 'Insert success: ' + JSON.stringify(newCourse, null, 2));
 
         // Cleanup
         console.log('Cleaning up...');
         await supabase.from('courses').delete().eq('id', newCourse.id);
     }
-    */
 }
 
 testCourses();
