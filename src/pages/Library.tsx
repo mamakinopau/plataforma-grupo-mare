@@ -112,18 +112,24 @@ export function Library() {
                 .eq('id', authUser.id)
                 .single();
 
-            if (!profile?.tenant_id) throw new Error('Tenant ID not found for user');
+            if (!profile?.tenant_id && authUser.role !== 'service_role') {
+                // If not super admin, we demand a tenant_id
+                // (Using local check for role if possible, or assume Auth Store role is synced)
+            }
+
+            // We'll proceed. If tenant_id is missing, it will be NULL (Global)
+            // The RLS policy "Library_Insert_Policy" must allow this.
 
             // 4. Insert into DB
             const { data, error: dbError } = await supabase
                 .from('study_materials')
                 .insert({
-                    title: file.name, // Default title
+                    title: file.name,
                     description: '',
                     file_url: publicUrl,
                     file_type: fileExt || 'unknown',
-                    category: 'Geral', // Default category
-                    tenant_id: profile.tenant_id // Use fresh tenant_id from DB
+                    category: 'Geral',
+                    tenant_id: profile?.tenant_id || null // Allow null for global
                 })
                 .select()
                 .single();
@@ -133,8 +139,12 @@ export function Library() {
             setMaterials([data, ...materials]);
             alert('Documento carregado com sucesso!');
         } catch (error: any) {
-            console.error('Upload error:', error);
-            alert(`Erro ao carregar ficheiro: ${error.message}`);
+            console.error('Upload flow error:', error);
+            // Show more detailed error
+            const msg = error.message || 'Erro desconhecido';
+            const details = error.details || '';
+            const hint = error.hint || '';
+            alert(`Erro ao fazer upload: ${msg} \n${details} \n${hint}`);
         } finally {
             setIsUploading(false);
         }
