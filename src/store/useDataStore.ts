@@ -21,7 +21,7 @@ interface DataState {
     deleteCourse: (id: string) => Promise<void>;
     addCategory: (category: Category) => Promise<void>;
     deleteCategory: (id: string) => Promise<void>;
-    addUser: (user: User) => Promise<void>; // In real app, this might trigger an invite
+    addUser: (user: User, options?: { sendWelcomeEmail?: boolean; autoAssignTraining?: boolean }) => Promise<void>; // In real app, this might trigger an invite
     updateUser: (id: string, user: Partial<User>) => Promise<void>;
     deleteUser: (id: string) => Promise<void>;
     addTenant: (tenant: Omit<Tenant, 'id' | 'createdAt'>) => Promise<void>;
@@ -270,7 +270,7 @@ export const useDataStore = create<DataState>((set, get) => ({
         }
     },
 
-    addUser: async (user) => {
+    addUser: async (user, options) => {
         try {
             // Call our Vercel Serverless Function
             const response = await fetch('/api/create-user', {
@@ -288,7 +288,8 @@ export const useDataStore = create<DataState>((set, get) => ({
                     userData: {
                         onboarding_completed: user.onboardingCompleted,
                         joined_at: user.joinedAt
-                    }
+                    },
+                    options // Pass the options (sendWelcomeEmail, autoAssignTraining) to the API
                 }),
             });
 

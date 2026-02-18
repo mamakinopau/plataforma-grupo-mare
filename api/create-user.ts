@@ -38,10 +38,15 @@ export default async function handler(req: any, res: any) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     try {
-        const { email, password, name, role, tenantId, position, userData } = req.body;
+        const { email, password, name, role, tenantId, position, userData, options } = req.body;
 
         if (!email || !password || !tenantId) {
             return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        if (options?.sendWelcomeEmail) {
+            console.warn(`[CreateUser] Welcome email requested for ${email} but no email provider is configured.`);
+            // TODO: Integrate Resend or similar service here
         }
 
         // 1. Create user in Supabase Auth
