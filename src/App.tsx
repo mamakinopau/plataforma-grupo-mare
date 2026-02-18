@@ -11,6 +11,7 @@ import { UpdatePassword } from './pages/UpdatePassword';
 import { Dashboard } from './pages/Dashboard';
 import { Courses } from './pages/Courses';
 import { CourseDetail } from './pages/CourseDetail';
+import { useNavigate } from 'react-router-dom';
 import { CourseEditor } from './pages/admin/CourseEditor';
 import { Profile } from './pages/Profile';
 import { Leaderboard } from './pages/Leaderboard';
@@ -21,6 +22,25 @@ import { Help } from './pages/Help';
 import { Settings } from './pages/Settings';
 import { Reports } from './pages/Reports';
 import { BrandingProvider } from './components/layout/BrandingProvider';
+
+function AuthListener() {
+    const { checkSession } = useAuthStore();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+            console.log('Auth event:', event);
+            if (event === 'PASSWORD_RECOVERY') {
+                navigate('/update-password');
+            }
+            await checkSession();
+        });
+
+        return () => subscription.unsubscribe();
+    }, [checkSession, navigate]);
+
+    return null;
+}
 
 import { UserRole } from './types';
 
@@ -59,19 +79,6 @@ function App() {
 
     useEffect(() => {
         checkSession();
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            console.log('Auth event:', event);
-            if (event === 'PASSWORD_RECOVERY') {
-                // Ensure we are on the update password page
-                // navigate('/update-password'); // We can't use navigate here easily as it's outside Router context or we move this inside?
-                // Actually App component is outside Router. We can't use navigate.
-                // But the URL should heavily imply where we are.
-            }
-            await checkSession();
-        });
-
-        return () => subscription.unsubscribe();
     }, []);
 
     if (isLoading) {
@@ -84,6 +91,7 @@ function App() {
 
     return (
         <Router>
+            <AuthListener />
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/update-password" element={<UpdatePassword />} />
