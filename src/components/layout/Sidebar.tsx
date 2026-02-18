@@ -72,6 +72,9 @@ export function Sidebar() {
                     <LogOut className="w-5 h-5 mr-3" />
                     {t('common.logout')}
                 </button>
+                <div className="mt-4 text-xs text-gray-400 text-center">
+                    v1.1 (Debug)
+                </div>
             </div>
         </aside>
     );
