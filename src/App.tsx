@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuthStore } from './store/useAuthStore';
 import { useDataStore } from './store/useDataStore';
@@ -54,6 +54,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const initializeData = useDataStore((state) => state.initialize);
     const initializeNotifications = useNotificationStore((state) => state.initialize);
 
+    const location = useLocation();
+
     useEffect(() => {
         if (isAuthenticated) {
             initializeData();
@@ -62,7 +64,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     }, [isAuthenticated, initializeData, initializeNotifications]);
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+        // Preserve the hash and search params so Supabase can handle recovery links
+        // even if they initially landed on a protected route and got redirected
+        const redirectPath = '/login' + location.search + location.hash;
+        return <Navigate to={redirectPath} replace />;
     }
     return <>{children}</>;
 }
