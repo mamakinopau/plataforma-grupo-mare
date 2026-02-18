@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Users, BarChart3, Settings, LogOut, Trophy, Megaphone, HelpCircle, Building } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Users, BarChart3, Settings, LogOut, Trophy, Megaphone, HelpCircle, Building, FileText } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { cn } from '../../lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ export function Sidebar() {
     const links = [
         { to: '/', icon: LayoutDashboard, label: t('common.dashboard') },
         { to: '/courses', icon: BookOpen, label: t('common.courses') },
-        { to: '/library', icon: BookOpen, label: 'Biblioteca' }, // TODO: Add translation
+        { to: '/library', icon: FileText, label: 'Biblioteca' }, // TODO: Add translation
         { to: '/leaderboard', icon: Trophy, label: t('common.leaderboard') },
         ...(user?.role !== 'employee' ? [
             { to: '/reports', icon: BarChart3, label: t('common.reports') },

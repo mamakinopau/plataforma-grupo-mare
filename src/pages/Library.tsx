@@ -102,7 +102,19 @@ export function Library() {
                 .from('study-materials')
                 .getPublicUrl(filePath);
 
-            // 3. Insert into DB
+            // 3. Fetch current user profile to ensure we have the correct tenant_id for RLS
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            if (!authUser) throw new Error('User not found');
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('tenant_id')
+                .eq('id', authUser.id)
+                .single();
+
+            if (!profile?.tenant_id) throw new Error('Tenant ID not found for user');
+
+            // 4. Insert into DB
             const { data, error: dbError } = await supabase
                 .from('study_materials')
                 .insert({
@@ -111,7 +123,7 @@ export function Library() {
                     file_url: publicUrl,
                     file_type: fileExt || 'unknown',
                     category: 'Geral', // Default category
-                    tenant_id: user?.tenantId // Handled by RLS usually, but good to have
+                    tenant_id: profile.tenant_id // Use fresh tenant_id from DB
                 })
                 .select()
                 .single();
