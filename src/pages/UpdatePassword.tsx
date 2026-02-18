@@ -41,21 +41,30 @@ export function UpdatePassword() {
         }
 
         setIsLoading(true);
+        console.log('[UpdatePassword] Starting update process...');
 
         try {
-            const { error } = await supabase.auth.updateUser({
+            const { data: { user } } = await supabase.auth.getUser();
+            console.log('[UpdatePassword] Current user before update:', user?.id);
+
+            const { data, error } = await supabase.auth.updateUser({
                 password: password
             });
+            console.log('[UpdatePassword] UpdateUser result:', { data, error });
 
             if (error) throw error;
 
+            console.log('[UpdatePassword] Success! Redirecting in 3s...');
             setSuccess(true);
             setTimeout(() => {
+                console.log('[UpdatePassword] Redirecting now...');
                 navigate('/');
             }, 3000);
         } catch (err: any) {
+            console.error('[UpdatePassword] Error caught:', err);
             setError(err.message || 'Erro ao atualizar a password.');
         } finally {
+            console.log('[UpdatePassword] Finally block reached.');
             setIsLoading(false);
         }
     };
