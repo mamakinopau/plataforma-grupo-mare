@@ -44,19 +44,6 @@ export default async function handler(req: any, res: any) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        if (options?.sendWelcomeEmail) {
-            // Trigger Supabase Reset Password email
-            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://plataforma-grupo-mare.vercel.app/update-password',
-            });
-
-            if (resetError) {
-                console.warn(`[CreateUser] Failed to send reset password email: ${resetError.message}`);
-            } else {
-                console.log(`[CreateUser] Reset password email sent to ${email}`);
-            }
-        }
-
         // 1. Create user in Supabase Auth
         const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
             email,
@@ -89,6 +76,20 @@ export default async function handler(req: any, res: any) {
             // If profile creation fails, we might want to delete the auth user to maintain consistency
             // await supabase.auth.admin.deleteUser(authUser.user.id);
             throw profileError;
+        }
+
+        if (options?.sendWelcomeEmail) {
+            // Trigger Supabase Reset Password email
+            // We use the same email we just used to create the user
+            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://plataforma-grupo-mare.vercel.app/update-password',
+            });
+
+            if (resetError) {
+                console.warn(`[CreateUser] Failed to send reset password email: ${resetError.message}`);
+            } else {
+                console.log(`[CreateUser] Reset password email sent to ${email}`);
+            }
         }
 
         return res.status(200).json({ user: authUser.user, message: 'User created successfully' });
