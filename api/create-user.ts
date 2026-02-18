@@ -45,8 +45,16 @@ export default async function handler(req: any, res: any) {
         }
 
         if (options?.sendWelcomeEmail) {
-            console.warn(`[CreateUser] Welcome email requested for ${email} but no email provider is configured.`);
-            // TODO: Integrate Resend or similar service here
+            // Trigger Supabase Reset Password email
+            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://plataforma-grupo-mare.vercel.app/update-password',
+            });
+
+            if (resetError) {
+                console.warn(`[CreateUser] Failed to send reset password email: ${resetError.message}`);
+            } else {
+                console.log(`[CreateUser] Reset password email sent to ${email}`);
+            }
         }
 
         // 1. Create user in Supabase Auth
