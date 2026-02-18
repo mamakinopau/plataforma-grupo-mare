@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { Button } from '../components/ui/Button';
@@ -11,6 +11,13 @@ export function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    // Safety net: If user is redirected to login with a recovery hash, send them to update-password
+    useEffect(() => {
+        if (window.location.hash && window.location.hash.includes('type=recovery')) {
+            navigate('/update-password');
+        }
+    }, [navigate]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
