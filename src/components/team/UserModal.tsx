@@ -160,9 +160,18 @@ export function UserModal({ isOpen, onClose, user }: UserModalProps) {
                     />
                 </div>
 
-                <Input
+                <Select
                     label="Cargo / Posição"
-                    placeholder="Ex: Empregado de Mesa"
+                    options={[
+                        { value: 'Empregado de Mesa', label: 'Empregado de Mesa' },
+                        { value: 'Cozinheiro', label: 'Cozinheiro' },
+                        { value: 'Barman', label: 'Barman' },
+                        { value: 'Responsável Sala', label: 'Responsável Sala' },
+                        { value: 'Responsável Cozinha', label: 'Responsável Cozinha' },
+                        { value: 'Chefe de Cozinha', label: 'Chefe de Cozinha' },
+                        { value: 'Gerente', label: 'Gerente' },
+                        { value: 'Sub-Gerente', label: 'Sub-Gerente' }
+                    ]}
                     value={position}
                     onChange={(e) => setPosition(e.target.value)}
                 />
