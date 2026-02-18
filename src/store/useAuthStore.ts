@@ -123,8 +123,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     },
 
     logout: async () => {
-        await supabase.auth.signOut();
+        console.log('[AuthStore] Logging out...');
+        const { error } = await supabase.auth.signOut();
+        if (error) console.error('[AuthStore] Supabase signOut error:', error);
+
+        console.log('[AuthStore] Setting state to unauthenticated');
         set({ user: null, isAuthenticated: false });
+        console.log('[AuthStore] State updated');
     },
 
     updateUser: async (updates) => {

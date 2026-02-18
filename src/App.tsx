@@ -57,6 +57,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const location = useLocation();
 
     useEffect(() => {
+        console.log('[ProtectedRoute] isAuthenticated:', isAuthenticated);
         if (isAuthenticated) {
             initializeData();
             initializeNotifications();
