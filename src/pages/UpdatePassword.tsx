@@ -47,9 +47,17 @@ export function UpdatePassword() {
             const { data: { user } } = await supabase.auth.getUser();
             console.log('[UpdatePassword] Current user before update:', user?.id);
 
-            const { data, error } = await supabase.auth.updateUser({
+            // Create a timeout promise to prevent hanging
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('O pedido demorou demasiado tempo (Timeout). Verifique se a password foi alterada.')), 10000)
+            );
+
+            const updatePromise = supabase.auth.updateUser({
                 password: password
             });
+
+            // Race the update against the timeout
+            const { data, error } = await Promise.race([updatePromise, timeoutPromise]) as any;
             console.log('[UpdatePassword] UpdateUser result:', { data, error });
 
             if (error) throw error;

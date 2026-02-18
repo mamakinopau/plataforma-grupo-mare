@@ -38,7 +38,8 @@ function AuthListener() {
             if (event === 'PASSWORD_RECOVERY') {
                 navigate('/update-password');
             }
-            await checkSession();
+            // Do NOT call checkSession() here. It causes race conditions with logout.
+            // App.tsx's main useEffect handles initial session check.
         });
 
         return () => subscription.unsubscribe();
