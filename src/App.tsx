@@ -6,6 +6,7 @@ import { useNotificationStore } from './store/useNotificationStore';
 
 import { Layout } from './components/layout/Layout';
 import { Login } from './pages/Login';
+import { UpdatePassword } from './pages/UpdatePassword';
 import { Dashboard } from './pages/Dashboard';
 import { Courses } from './pages/Courses';
 import { CourseDetail } from './pages/CourseDetail';
@@ -71,6 +72,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/update-password" element={<UpdatePassword />} />
 
                 <Route path="/" element={
                     <ProtectedRoute>
