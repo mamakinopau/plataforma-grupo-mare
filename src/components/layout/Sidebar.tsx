@@ -11,6 +11,7 @@ export function Sidebar() {
     const links = [
         { to: '/', icon: LayoutDashboard, label: t('common.dashboard') },
         { to: '/courses', icon: BookOpen, label: t('common.courses') },
+        { to: '/library', icon: BookOpen, label: 'Biblioteca' }, // TODO: Add translation
         { to: '/leaderboard', icon: Trophy, label: t('common.leaderboard') },
         ...(user?.role !== 'employee' ? [
             { to: '/reports', icon: BarChart3, label: t('common.reports') },

@@ -11,6 +11,7 @@ import { UpdatePassword } from './pages/UpdatePassword';
 import { Dashboard } from './pages/Dashboard';
 import { Courses } from './pages/Courses';
 import { CourseDetail } from './pages/CourseDetail';
+import { Library } from './pages/Library';
 import { useNavigate } from 'react-router-dom';
 import { CourseEditor } from './pages/admin/CourseEditor';
 import { Profile } from './pages/Profile';
@@ -118,6 +119,7 @@ function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="courses" element={<Courses />} />
                     <Route path="courses/:courseId" element={<CourseDetail />} />
+                    <Route path="library" element={<Library />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="leaderboard" element={<Leaderboard />} />
                     <Route path="reports" element={<Reports />} />
