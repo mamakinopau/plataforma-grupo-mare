@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAuthStore } from './store/useAuthStore';
 import { useDataStore } from './store/useDataStore';
 import { useNotificationStore } from './store/useNotificationStore';
+import { supabase } from './lib/supabase';
 
 import { Layout } from './components/layout/Layout';
 import { Login } from './pages/Login';
@@ -58,6 +59,19 @@ function App() {
 
     useEffect(() => {
         checkSession();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log('Auth event:', event);
+            if (event === 'PASSWORD_RECOVERY') {
+                // Ensure we are on the update password page
+                // navigate('/update-password'); // We can't use navigate here easily as it's outside Router context or we move this inside?
+                // Actually App component is outside Router. We can't use navigate.
+                // But the URL should heavily imply where we are.
+            }
+            await checkSession();
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     if (isLoading) {
