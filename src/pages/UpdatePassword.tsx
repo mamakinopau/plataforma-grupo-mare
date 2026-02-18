@@ -22,6 +22,8 @@ export function UpdatePassword() {
         if (hash && hash.includes('error_code=otp_expired')) {
             setError('O link de recuperação expirou ou é inválido. Por favor peça um novo.');
         }
+        // If we have type=recovery in hash, we are in the right place, 
+        // Supabase client might consume it automatically, or we rely on the session being set.
     }, [location]);
 
     const handleSubmit = async (e: React.FormEvent) => {

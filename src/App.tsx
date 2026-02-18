@@ -28,6 +28,11 @@ function AuthListener() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Fallback: Check hash manually if event doesn't fire fast enough
+        if (window.location.hash && window.location.hash.includes('type=recovery')) {
+            navigate('/update-password');
+        }
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
             console.log('Auth event:', event);
             if (event === 'PASSWORD_RECOVERY') {
