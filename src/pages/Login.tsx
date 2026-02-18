@@ -12,10 +12,16 @@ export function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Safety net: If user is redirected to login with a recovery hash, send them to update-password
+    // Safety net: If user is redirected to login with a recovery hash OR an error hash (like expired link),
+    // send them to update-password so they can see the appropriate message/form.
     useEffect(() => {
-        if (window.location.hash && window.location.hash.includes('type=recovery')) {
-            navigate('/update-password');
+        const hash = window.location.hash;
+        if (hash && (hash.includes('type=recovery') || hash.includes('error='))) {
+            navigate({
+                pathname: '/update-password',
+                search: window.location.search,
+                hash: hash
+            });
         }
     }, [navigate]);
 
